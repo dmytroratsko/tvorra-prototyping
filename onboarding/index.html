@@ -699,28 +699,28 @@ html, body {
   gap:3px; overflow:hidden; flex-shrink:0;
 }
 .pw-col-cell {
-  /* Uses .photo-card system */
   border-radius:0;
 }
 /* gradient fade at bottom of collage */
 .pw-collage::after {
   content:'';
   position:absolute; bottom:0; left:0; right:0;
-  height:160px;
-  background:linear-gradient(to bottom, transparent, var(--bg));
+  height:180px;
+  background:linear-gradient(to bottom, transparent 0%, var(--bg) 75%);
   pointer-events:none; z-index:10;
 }
 
 /* ─ Offer section ─ */
 .pw-offer {
-  padding:0 20px; text-align:center;
+  padding:0 20px 4px; text-align:center;
   position:relative; z-index:2;
-  margin-top:-28px;
+  margin-top:-72px;
 }
 .pw-title {
-  font-size:24px; font-weight:800;
-  letter-spacing:-.7px; color:#fff;
-  line-height:1.2; margin-bottom:10px;
+  font-size:32px; font-weight:800;
+  letter-spacing:-.9px; color:#fff;
+  line-height:1.2; margin-bottom:14px;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.6);
 }
 .pw-title span {
   background:var(--grad);
@@ -743,7 +743,7 @@ html, body {
 }
 
 /* ─ Plans ─ */
-.pw-plans { padding:0 20px; display:flex; flex-direction:column; gap:10px; margin-bottom:24px; margin-top:4px; }
+.pw-plans { padding:0 20px; display:flex; flex-direction:column; gap:10px; margin-bottom:24px; margin-top:28px; }
 
 /* ─ Sticky CTA ─ */
 .pw-sticky-cta {
