@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tvorra — Onboarding</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── TOKENS (Tvorra Figma palette) ── */
+:root {
+  --bg:        #08080f;
+  --surf:      #0f0f1a;
+  --surf2:     #16162a;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.13);
+  --accent:    #C94BE0;
+  --accent2:   #7040D8;
+  --grad:      linear-gradient(135deg, #C94BE0 0%, #7040D8 100%);
+  --grad-rev:  linear-gradient(315deg, #C94BE0 0%, #7040D8 100%);
+  --text:      #FFFFFF;
+  --text2:     rgba(255,255,255,0.5);
+  --text3:     rgba(255,255,255,0.25);
+  --font:      -apple-system,'SF Pro Display','Helvetica Neue',sans-serif;
+  --ease:      cubic-bezier(0.4,0,0.2,1);
+}
+
+html, body {
+  height: 100%;
+  background: #080810;
+  font-family: var(--font);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ══ PHONE SHELL ══ */
+.phone {
+  position: relative;
+  width: 393px;
+  height: 852px;
+  background: var(--bg);
+  border-radius: 52px;
+  overflow: hidden;
+  transform-origin: center;
+  box-shadow:
+    0 0 0 9px #1c1c1c,
+    0 0 0 11px #2a2a2a,
+    0 50px 100px rgba(0,0,0,0.9);
+}
+/* Dynamic island */
+.phone::before {
+  content:'';
+  position:absolute; top:13px; left:50%;
+  transform:translateX(-50%);
+  width:118px; height:33px;
+  background:#000; border-radius:18px;
+  z-index:500; pointer-events:none;
+}
+/* Home indicator */
+.phone::after {
+  content:'';
+  position:absolute; bottom:8px; left:50%;
+  transform:translateX(-50%);
+  width:134px; height:5px;
+  border-radius:3px;
+  background:rgba(255,255,255,0.18);
+  z-index:500; pointer-events:none;
+}
+
+/* ── STATUS BAR ── */
+.status {
+  position:absolute; top:0; left:0; right:0;
+  height:54px;
+  display:flex; align-items:flex-end;
+  justify-content:space-between;
+  padding:0 28px 8px;
+  z-index:100; pointer-events:none;
+}
+.status-time { font-size:15px; font-weight:600; color:#fff; letter-spacing:-0.3px; }
+.status-icons { display:flex; align-items:center; gap:6px; }
+.status-icons svg { width:16px; height:16px; fill:#fff; opacity:.9; }
+
+/* ── SCREENS ── */
+.screen {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  opacity:0; pointer-events:none;
+  transform:translateX(26px);
+  transition: opacity .34s var(--ease), transform .34s var(--ease);
+}
+.screen.active  { opacity:1; pointer-events:all; transform:translateX(0); }
+.screen.exit    { opacity:0; transform:translateX(-26px); pointer-events:none; }
+
+/* ── PROGRESS ── */
+.prog {
+  display:flex; gap:5px;
+  padding:0 20px; margin-top:14px; flex-shrink:0;
+}
+.prog-s {
+  flex:1; height:3px; border-radius:2px;
+  background:rgba(255,255,255,0.1);
+  transition:background .4s;
+  overflow:hidden; position:relative;
+}
+.prog-s.done   { background:var(--accent); }
+.prog-s.active { background:rgba(255,255,255,0.1); }
+.prog-s.active::after {
+  content:'';
+  position:absolute; inset:0;
+  background:var(--grad);
+  border-radius:2px;
+}
+
+/* ── BACK BTN ── */
+.back {
+  background:none; border:none; cursor:pointer;
+  color:var(--text2); font-size:15px; font-family:var(--font);
+  display:flex; align-items:center; gap:5px;
+  padding:10px 20px 2px; width:fit-content;
+  transition:color .2s; flex-shrink:0;
+}
+.back:hover { color:#fff; }
+.back svg { width:18px; height:18px; }
+
+/* ── BTN PRIMARY ── */
+.btn {
+  width:100%; height:54px;
+  border-radius:99px; border:none;
+  background:var(--grad);
+  color:#fff; font-size:17px; font-weight:600;
+  letter-spacing:-0.2px; cursor:pointer;
+  transition:transform .15s, opacity .15s;
+  position:relative; overflow:hidden;
+  font-family:var(--font);
+  box-shadow: 0 6px 28px rgba(201,75,224,0.38);
+}
+.btn::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.14),transparent);
+  pointer-events:none;
+}
+.btn:active { transform:scale(0.97); opacity:.92; }
+.btn:disabled { opacity:.32; pointer-events:none; }
+
+/* ══════════════════════════
+   PHOTO CARD SYSTEM
+   CSS-generated realistic
+   photo placeholders
+══════════════════════════ */
+.photo-card {
+  position:relative; overflow:hidden;
+  background:var(--scene, #1a1020);
+}
+/* Person body */
+.photo-card::before {
+  content:'';
+  position:absolute;
+  bottom:-4%; left:50%;
+  transform:translateX(-50%);
+  width:55%; height:70%;
+  background:var(--body, rgba(230,190,160,0.22));
+  border-radius:48% 48% 0 0;
+}
+/* Head */
+.photo-card::after {
+  content:'';
+  position:absolute;
+  bottom:58%; left:50%;
+  transform:translateX(-50%);
+  width:30%; aspect-ratio:1;
+  background:var(--head, rgba(230,190,160,0.28));
+  border-radius:50%;
+  box-shadow:0 -2px 0 0 var(--head, rgba(230,190,160,0.28));
+}
+/* Hair overlay */
+.photo-hair {
+  position:absolute;
+  bottom:68%; left:50%;
+  transform:translateX(-50%);
+  width:34%; height:14%;
+  background:var(--hair, rgba(80,50,30,0.7));
+  border-radius:50% 50% 0 0;
+  z-index:1;
+}
+/* Scene lighting */
+.photo-light {
+  position:absolute; inset:0;
+  background:var(--light, linear-gradient(160deg, rgba(200,100,255,0.1) 0%, transparent 60%));
+  z-index:2; pointer-events:none;
+}
+/* Bottom fade */
+.photo-fade {
+  position:absolute; bottom:0; left:0; right:0;
+  height:40%; z-index:3; pointer-events:none;
+  background:linear-gradient(to bottom, transparent, rgba(0,0,0,0.55));
+}
+
+/* Specific photo themes */
+.pt-f1 { --scene:#1e0a2e; --body:rgba(240,195,165,0.3); --head:rgba(240,195,165,0.35); --hair:rgba(30,15,5,0.8); --light:linear-gradient(160deg,rgba(201,75,224,0.15),transparent 60%); }
+.pt-f2 { --scene:#0a1535; --body:rgba(210,175,145,0.28); --head:rgba(210,175,145,0.33); --hair:rgba(15,10,5,0.85); --light:linear-gradient(160deg,rgba(80,120,255,0.12),transparent 60%); }
+.pt-f3 { --scene:#200a10; --body:rgba(160,115,90,0.3);  --head:rgba(160,115,90,0.35);  --hair:rgba(10,5,2,0.9);   --light:linear-gradient(160deg,rgba(255,60,100,0.1),transparent 60%); }
+.pt-m1 { --scene:#0a2018; --body:rgba(185,150,120,0.28); --head:rgba(185,150,120,0.33); --hair:rgba(20,12,5,0.85); --light:linear-gradient(160deg,rgba(50,180,120,0.1),transparent 60%); }
+.pt-m2 { --scene:#15102a; --body:rgba(140,100,75,0.28);  --head:rgba(140,100,75,0.33);  --hair:rgba(5,3,2,0.9);    --light:linear-gradient(160deg,rgba(120,80,255,0.12),transparent 60%); }
+.pt-m3 { --scene:#1a1005; --body:rgba(200,165,130,0.28); --head:rgba(200,165,130,0.33); --hair:rgba(40,20,5,0.8);  --light:linear-gradient(160deg,rgba(255,160,50,0.1),transparent 60%); }
+.pt-f4 { --scene:#280a28; --body:rgba(255,210,180,0.28); --head:rgba(255,210,180,0.33); --hair:rgba(180,80,20,0.7); --light:linear-gradient(160deg,rgba(220,50,200,0.12),transparent 60%); }
+.pt-m4 { --scene:#080e28; --body:rgba(170,135,110,0.28); --head:rgba(170,135,110,0.33); --hair:rgba(10,5,2,0.9);   --light:linear-gradient(160deg,rgba(50,80,220,0.12),transparent 60%); }
+.pt-f5 { --scene:#1c0a08; --body:rgba(120,85,65,0.3);   --head:rgba(120,85,65,0.35);   --hair:rgba(5,2,1,0.9);    --light:linear-gradient(160deg,rgba(255,80,50,0.1),transparent 60%); }
+.pt-m5 { --scene:#051a12; --body:rgba(90,65,50,0.3);    --head:rgba(90,65,50,0.35);    --hair:rgba(3,2,1,0.92);   --light:linear-gradient(160deg,rgba(50,200,130,0.1),transparent 60%); }
+.pt-f6 { --scene:#12082a; --body:rgba(230,190,160,0.28); --head:rgba(230,190,160,0.33); --hair:rgba(60,30,10,0.75); --light:linear-gradient(160deg,rgba(160,80,255,0.12),transparent 60%); }
+.pt-m6 { --scene:#1a0c0c; --body:rgba(175,140,115,0.28); --head:rgba(175,140,115,0.33); --hair:rgba(8,4,2,0.88);   --light:linear-gradient(160deg,rgba(255,80,80,0.1),transparent 60%); }
+
+
+/* ═════════════════════════════════
+   S1 — SPLASH
+═════════════════════════════════ */
+#s-splash { background:#000; }
+
+.mosaic {
+  position:absolute; inset:0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:3px;
+  transform:rotate(-7deg) scale(1.3) translateY(-10px);
+  animation:mosaic-drift 14s ease-in-out infinite alternate;
+}
+@keyframes mosaic-drift {
+  0%   { transform:rotate(-7deg) scale(1.3) translateY(-10px); }
+  100% { transform:rotate(-7deg) scale(1.3) translateY(14px); }
+}
+.mosaic-cell {
+  border-radius:10px; overflow:hidden;
+  animation:cell-breathe var(--d,3s) ease-in-out infinite alternate;
+  animation-delay:var(--dl,0s);
+}
+@keyframes cell-breathe {
+  0%   { opacity:.65; }
+  100% { opacity:1; }
+}
+
+.splash-overlay {
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to bottom,
+      rgba(0,0,0,0.3) 0%,
+      transparent 20%,
+      transparent 42%,
+      rgba(0,0,0,0.75) 70%,
+      #000 100%);
+  z-index:1;
+}
+
+.splash-bottom {
+  position:relative; z-index:2;
+  margin-top:auto;
+  padding:0 24px 50px;
+}
+.splash-badge {
+  margin-bottom:18px; text-align:center;
+}
+.splash-stars {
+  font-size:19px; letter-spacing:4px;
+  margin-bottom:7px;
+}
+.splash-stat {
+  display:flex; align-items:center;
+  justify-content:center; gap:10px;
+}
+.splash-stat-text {
+  font-size:20px; font-weight:800;
+  color:#fff; letter-spacing:-.3px;
+  text-align:center; line-height:1.22;
+}
+.splash-laurel { flex-shrink:0; }
+.splash-laurel.flip { transform:scaleX(-1); }
+
+.splash-title {
+  font-size:38px; font-weight:800;
+  letter-spacing:-1.4px; color:#fff;
+  line-height:1.1; margin-bottom:10px;
+}
+.splash-sub {
+  font-size:15px; color:var(--text2);
+  line-height:1.55; margin-bottom:26px;
+}
+
+.btn-splash {
+  width:100%; height:56px;
+  border-radius:99px; border:none;
+  background:var(--grad);
+  color:#fff; font-size:17px; font-weight:700;
+  letter-spacing:-0.2px; cursor:pointer;
+  box-shadow:0 10px 36px rgba(201,75,224,0.48);
+  transition:transform .15s, box-shadow .15s;
+  position:relative; overflow:hidden;
+  margin-bottom:14px; font-family:var(--font);
+}
+.btn-splash::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.18),transparent);
+}
+.btn-splash:active { transform:scale(0.97); }
+
+.splash-terms {
+  text-align:center; font-size:11.5px;
+  color:var(--text3); line-height:1.6;
+}
+.splash-terms a { color:var(--text2); text-decoration:none; }
+
+
+/* ═════════════════════════════════
+   S2 — GENDER
+═════════════════════════════════ */
+#s-gender { background:var(--bg); }
+
+.s-body {
+  flex:1; overflow-y:auto;
+  padding:0 20px;
+  display:flex; flex-direction:column;
+}
+.s-body::-webkit-scrollbar { display:none; }
+
+.s-title {
+  font-size:30px; font-weight:800;
+  letter-spacing:-1px; color:#fff;
+  line-height:1.15; margin-bottom:6px;
+}
+.s-sub {
+  font-size:14px; color:var(--text2);
+  margin-bottom:24px; line-height:1.5;
+}
+
+/* Glam AI-style list rows */
+.list-row {
+  display:flex; align-items:center;
+  gap:14px; padding:15px 16px;
+  border-radius:18px;
+  border:1.5px solid var(--border2);
+  background:var(--surf);
+  cursor:pointer; margin-bottom:10px;
+  transition:border-color .22s, background .22s, transform .12s;
+  position:relative;
+}
+.list-row:active { transform:scale(.98); }
+.list-row.selected {
+  border-color:var(--accent);
+  background:rgba(201,75,224,0.08);
+}
+.list-row.selected::before {
+  content:''; position:absolute;
+  inset:0; border-radius:18px;
+  background:rgba(201,75,224,0.04);
+}
+
+.row-icon { font-size:24px; flex-shrink:0; line-height:1; }
+.row-info { flex:1; }
+.row-name { font-size:17px; font-weight:600; color:#fff; letter-spacing:-0.2px; }
+.row-desc { font-size:13px; color:var(--text2); margin-top:2px; }
+.row-chevron {
+  width:20px; height:20px; flex-shrink:0;
+  opacity:.22; transition:opacity .2s;
+}
+.list-row.selected .row-chevron { opacity:.85; }
+.list-row.selected .row-chevron path { stroke:var(--accent); }
+
+/* ── GENDER MINI PHOTO ICONS ── */
+.gi-icon {
+  width:42px; height:42px; border-radius:12px;
+  position:relative; overflow:hidden;
+  background:var(--gi-scene); flex-shrink:0;
+}
+.gi-icon::before {
+  content:''; position:absolute; bottom:-6%; left:50%;
+  transform:translateX(-50%);
+  width:58%; height:68%;
+  background:var(--gi-body); border-radius:50% 50% 0 0;
+}
+.gi-icon::after {
+  content:''; position:absolute; bottom:56%; left:50%;
+  transform:translateX(-50%);
+  width:34%; aspect-ratio:1;
+  background:var(--gi-head); border-radius:50%;
+}
+.gi-icon .gi-hair {
+  position:absolute; bottom:71%; left:50%;
+  transform:translateX(-50%);
+  width:38%; height:17%;
+  background:var(--gi-hair);
+  border-radius:50% 50% 0 0; z-index:1;
+}
+.gi-icon .gi-glow {
+  position:absolute; inset:0;
+  background:var(--gi-light);
+  z-index:2; pointer-events:none;
+}
+.gi-female { --gi-scene:#1e0a2e; --gi-body:rgba(240,195,165,0.40); --gi-head:rgba(240,195,165,0.45); --gi-hair:rgba(30,15,5,0.80); --gi-light:linear-gradient(160deg,rgba(201,75,224,0.2),transparent 55%); }
+.gi-male   { --gi-scene:#0a2018; --gi-body:rgba(185,150,120,0.38); --gi-head:rgba(185,150,120,0.43); --gi-hair:rgba(20,12,5,0.85);  --gi-light:linear-gradient(160deg,rgba(50,180,120,0.16),transparent 55%); }
+.gi-other  { --gi-scene:#1a1030; --gi-body:rgba(215,185,155,0.35); --gi-head:rgba(215,185,155,0.40); --gi-hair:rgba(80,40,20,0.72); --gi-light:linear-gradient(160deg,rgba(120,80,255,0.17),transparent 55%); }
+
+
+/* ═════════════════════════════════
+   S3 — EFFECT PICKER
+═════════════════════════════════ */
+#s-effect {
+  background:var(--bg);
+  /* no overflow here — handled by children */
+}
+
+.effect-scroll {
+  flex:1; overflow-y:auto;
+  padding:0 20px;
+}
+.effect-scroll::-webkit-scrollbar { width:3px; }
+.effect-scroll::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+/* Glam AI thumb row */
+.eff-row {
+  display:flex; align-items:center;
+  gap:13px; padding:10px 14px;
+  border-radius:16px;
+  border:1.5px solid var(--border);
+  background:var(--surf);
+  cursor:pointer; margin-bottom:9px;
+  transition:border-color .22s, background .22s, transform .12s;
+  flex-shrink:0;
+}
+.eff-row:active { transform:scale(.98); }
+.eff-row.selected {
+  border-color:var(--accent);
+  background:rgba(201,75,224,0.08);
+}
+
+/* Photo thumb 56×66 */
+.eff-thumb {
+  width:56px; height:66px;
+  border-radius:12px; overflow:hidden;
+  flex-shrink:0; position:relative;
+}
+/* Effect-specific thumb scenes */
+.et-kisses  { --scene:#2a0818; --body:rgba(240,190,160,0.32); --head:rgba(240,190,160,0.38); --hair:rgba(20,8,3,0.82); --light:linear-gradient(160deg,rgba(255,60,120,0.15),transparent 60%); }
+.et-dances  { --scene:#100828; --body:rgba(200,165,140,0.28); --head:rgba(200,165,140,0.33); --hair:rgba(10,5,2,0.85);  --light:linear-gradient(160deg,rgba(150,60,255,0.15),transparent 60%); }
+.et-hugs    { --scene:#1e1000; --body:rgba(215,175,145,0.28); --head:rgba(215,175,145,0.33); --hair:rgba(30,14,4,0.82); --light:linear-gradient(160deg,rgba(255,170,50,0.12),transparent 60%); }
+.et-tiktok  { --scene:#001a15; --body:rgba(170,135,110,0.28); --head:rgba(170,135,110,0.33); --hair:rgba(5,3,1,0.88);   --light:linear-gradient(160deg,rgba(30,220,180,0.14),transparent 60%); }
+.et-aivid   { --scene:#0c0820; --body:rgba(195,160,135,0.28); --head:rgba(195,160,135,0.33); --hair:rgba(8,4,2,0.86);   --light:linear-gradient(160deg,rgba(180,80,255,0.14),transparent 60%); }
+.et-t2v     { --scene:#021408; --body:rgba(155,120,95,0.28);  --head:rgba(155,120,95,0.33);  --hair:rgba(4,2,1,0.9);    --light:linear-gradient(160deg,rgba(50,200,120,0.12),transparent 60%); }
+.et-none    { --scene:#141428; --body:rgba(180,145,120,0.25); --head:rgba(180,145,120,0.3);  --hair:rgba(10,6,3,0.82);  --light:linear-gradient(160deg,rgba(100,100,255,0.12),transparent 60%); }
+
+.eff-info { flex:1; }
+.eff-tag {
+  font-size:10.5px; font-weight:700;
+  color:var(--accent); letter-spacing:.45px;
+  text-transform:uppercase; margin-bottom:2px;
+}
+.eff-name { font-size:16px; font-weight:700; color:#fff; letter-spacing:-0.2px; }
+.eff-desc { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.3; }
+
+.eff-chevron {
+  width:17px; height:17px; flex-shrink:0;
+  opacity:.2; transition:opacity .2s;
+}
+.eff-row.selected .eff-chevron { opacity:1; }
+.eff-row.selected .eff-chevron path { stroke:var(--accent); }
+
+/* Sticky CTA */
+.sticky-cta {
+  padding:10px 20px 44px;
+  background:linear-gradient(to bottom, transparent, var(--bg) 32%);
+  flex-shrink:0;
+}
+
+
+/* ═════════════════════════════════
+   S4 — PREVIEW SLIDES
+═════════════════════════════════ */
+#s-preview { background:#000; }
+
+.preview-wrap { flex:1; position:relative; overflow:hidden; }
+
+.preview-track {
+  display:flex; height:100%;
+  transition:transform .44s cubic-bezier(.4,0,.2,1);
+}
+
+.preview-slide {
+  min-width:100%; height:100%;
+  position:relative; overflow:hidden;
+}
+
+/* Full-screen photo scene */
+.ps-scene {
+  position:absolute; inset:0;
+  background:var(--sc, #0d0d1e);
+  overflow:hidden;
+}
+
+/* Larger central figure for preview */
+.ps-figure {
+  position:absolute;
+  bottom:0; left:50%;
+  transform:translateX(-50%);
+  width:62%; height:80%;
+  background:var(--body, rgba(220,185,155,0.22));
+  border-radius:46% 46% 0 0;
+  z-index:1;
+}
+.ps-head {
+  position:absolute;
+  bottom:66%; left:50%;
+  transform:translateX(-50%);
+  width:28%; aspect-ratio:1;
+  background:var(--head, rgba(220,185,155,0.28));
+  border-radius:50%;
+  z-index:2;
+}
+.ps-hair {
+  position:absolute;
+  bottom:72%; left:50%;
+  transform:translateX(-50%);
+  width:33%; height:13%;
+  background:var(--hair, rgba(30,15,4,0.8));
+  border-radius:50% 50% 0 0;
+  z-index:3;
+}
+.ps-glow {
+  position:absolute;
+  width:340px; height:340px;
+  border-radius:50%;
+  background:radial-gradient(circle, var(--gc, rgba(201,75,224,0.22)) 0%, transparent 70%);
+  left:50%; top:42%;
+  transform:translate(-50%,-50%);
+  animation:ps-glow 3s ease-in-out infinite alternate;
+  z-index:0;
+}
+@keyframes ps-glow {
+  0%   { transform:translate(-50%,-50%) scale(.88); opacity:.6; }
+  100% { transform:translate(-50%,-50%) scale(1.12); opacity:1; }
+}
+/* Floating deco items */
+.ps-deco {
+  position:absolute;
+  width:var(--sz,22px); height:var(--sz,22px);
+  opacity:var(--op,.45);
+  left:var(--x); top:var(--y);
+  animation:ps-float var(--d,3.5s) ease-in-out infinite alternate;
+  animation-delay:var(--dl,0s);
+  z-index:4;
+}
+@keyframes ps-float {
+  0%   { transform:translateY(0) rotate(0deg); }
+  100% { transform:translateY(-20px) rotate(15deg); }
+}
+/* 4-pointed sparkle */
+.deco-spark::before {
+  content:''; display:block; width:100%; height:100%;
+  background:var(--dc,rgba(255,255,255,0.7));
+  clip-path:polygon(50% 0%,55% 45%,100% 50%,55% 55%,50% 100%,45% 55%,0% 50%,45% 45%);
+}
+/* Heart shape */
+.deco-heart::before {
+  content:''; display:block; width:100%; height:100%;
+  background:var(--dc,rgba(255,80,120,0.8));
+  clip-path:polygon(25% 15%,50% 0%,75% 15%,100% 35%,100% 55%,50% 100%,0% 55%,0% 35%);
+  border-radius:30% 30% 0 0;
+}
+/* Circle dot */
+.deco-circle::before {
+  content:''; display:block; width:100%; height:100%;
+  background:var(--dc,rgba(255,255,255,0.5));
+  border-radius:50%;
+}
+/* Diamond */
+.deco-diamond::before {
+  content:''; display:block; width:70%; height:70%; margin:15%;
+  background:var(--dc,rgba(255,220,100,0.75));
+  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+}
+/* Music note line */
+.deco-note::before {
+  content:''; display:block; width:40%; height:100%; margin-left:30%;
+  background:var(--dc,rgba(200,150,255,0.75));
+  border-radius:3px 3px 0 0;
+  box-shadow: -60% 60% 0 0 var(--dc,rgba(200,150,255,0.75));
+}
+/* Light streak */
+.ps-streak {
+  position:absolute; inset:0; z-index:1;
+  background:var(--str, linear-gradient(135deg,rgba(201,75,224,0.05),transparent 50%));
+}
+
+.ps-overlay {
+  position:absolute; inset:0; z-index:5;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.08) 0%,
+    transparent 18%,
+    transparent 40%,
+    rgba(0,0,0,0.55) 65%,
+    rgba(0,0,0,0.95) 100%
+  );
+}
+
+/* Slide content */
+.ps-content {
+  position:absolute; bottom:0; left:0; right:0;
+  z-index:6; padding:0 24px 168px;
+}
+.ps-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(201,75,224,0.16);
+  border:1px solid rgba(201,75,224,0.35);
+  border-radius:99px; padding:4px 12px;
+  font-size:11px; font-weight:700;
+  color:var(--accent); letter-spacing:.5px;
+  margin-bottom:10px;
+}
+.ps-title {
+  font-size:28px; font-weight:800;
+  color:#fff; letter-spacing:-.8px;
+  line-height:1.15; margin-bottom:8px;
+}
+.ps-desc {
+  font-size:14px; color:rgba(255,255,255,.55);
+  line-height:1.5; margin-bottom:16px;
+}
+
+/* Dot indicators */
+.ps-dots {
+  position:absolute; z-index:7;
+  bottom:158px; left:0; right:0;
+  display:flex; justify-content:center; gap:5px;
+}
+.ps-dot {
+  height:4px; border-radius:2px;
+  background:rgba(255,255,255,.25);
+  transition:width .3s, background .3s;
+  width:6px;
+}
+.ps-dot.active { width:22px; background:var(--accent); }
+
+/* Preview CTA area */
+.ps-cta {
+  position:absolute; bottom:0; left:0; right:0;
+  z-index:8; padding:0 20px 44px;
+}
+.ps-btn {
+  width:100%; height:54px; border-radius:99px;
+  border:none; background:var(--grad);
+  color:#fff; font-size:17px; font-weight:700;
+  cursor:pointer; letter-spacing:-0.2px;
+  box-shadow:0 6px 26px rgba(201,75,224,0.38);
+  transition:transform .15s;
+  position:relative; overflow:hidden;
+  margin-bottom:12px; font-family:var(--font);
+}
+.ps-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent); }
+.ps-btn:active { transform:scale(.97); }
+.ps-skip {
+  text-align:center; font-size:14px;
+  color:rgba(255,255,255,.35);
+  cursor:pointer; transition:color .2s; padding:2px;
+}
+.ps-skip:hover { color:rgba(255,255,255,.6); }
+
+
+/* ═════════════════════════════════
+   S5 — PAYWALL
+═════════════════════════════════ */
+/* ═════════════════════════════════
+   S-LOADING
+═════════════════════════════════ */
+#s-loading { background:var(--bg); }
+.load-wrap { flex:1; padding:0 28px; display:flex; flex-direction:column; justify-content:center; }
+.load-title {
+  font-size:34px; font-weight:800; color:#fff;
+  letter-spacing:-1px; margin-bottom:36px;
+}
+.load-step {
+  display:flex; align-items:center; gap:18px;
+  padding:10px 0; opacity:.3;
+  transition:opacity .35s;
+}
+.load-step.ls-active, .load-step.ls-done { opacity:1; }
+.load-step span {
+  font-size:17px; font-weight:600;
+  color:rgba(255,255,255,.4);
+  transition:color .35s;
+}
+.load-step.ls-active span, .load-step.ls-done span { color:#fff; }
+.load-ico {
+  width:28px; height:28px; border-radius:50%;
+  border:2px solid rgba(255,255,255,.2);
+  flex-shrink:0; display:flex;
+  align-items:center; justify-content:center;
+  transition:background .35s, border-color .35s;
+}
+.load-step.ls-active .load-ico {
+  border-color:rgba(255,255,255,.8);
+  border-top-color:transparent;
+  animation:ls-spin .75s linear infinite;
+}
+.load-step.ls-done .load-ico {
+  background:#fff; border-color:#fff;
+}
+.load-step.ls-done .load-ico::after {
+  content:'';
+  width:8px; height:5px;
+  border-left:2.5px solid #08080f;
+  border-bottom:2.5px solid #08080f;
+  transform:rotate(-45deg) translate(1px,-1px);
+  display:block;
+}
+@keyframes ls-spin { to { transform:rotate(360deg); } }
+
+#s-paywall { background:var(--bg); overflow:hidden; }
+
+/* Close X */
+.pw-x {
+  position:absolute; top:56px; left:16px;
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(255,255,255,0.1); border:none;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  z-index:20; color:rgba(255,255,255,.7); font-size:15px;
+  transition:background .2s;
+}
+.pw-x:hover { background:rgba(255,255,255,.18); }
+
+.pw-scroll {
+  flex:1; overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding-top: 54px;
+}
+.pw-scroll::-webkit-scrollbar { display:none; }
+
+/* ─ Collage header ─ */
+.pw-collage {
+  height:300px; position:relative;
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:3px; overflow:hidden; flex-shrink:0;
+}
+.pw-col-cell {
+  /* Uses .photo-card system */
+  border-radius:0;
+}
+/* gradient fade at bottom of collage */
+.pw-collage::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0;
+  height:160px;
+  background:linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events:none; z-index:10;
+}
+
+/* ─ Offer section ─ */
+.pw-offer {
+  padding:0 20px; text-align:center;
+  position:relative; z-index:2;
+  margin-top:-28px;
+}
+.pw-title {
+  font-size:24px; font-weight:800;
+  letter-spacing:-.7px; color:#fff;
+  line-height:1.2; margin-bottom:10px;
+}
+.pw-title span {
+  background:var(--grad);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.pw-timer-row {
+  display:flex; align-items:center;
+  justify-content:center; gap:8px;
+  margin-bottom:20px;
+}
+.pw-timer-lbl { font-size:12px; color:var(--text2); }
+.pw-timer {
+  background:var(--surf2);
+  border:1px solid rgba(201,75,224,0.25);
+  border-radius:8px; padding:4px 12px;
+  font-size:18px; font-weight:700;
+  color:var(--accent); letter-spacing:2px;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ─ Plans ─ */
+.pw-plans { padding:0 20px; display:flex; flex-direction:column; gap:10px; margin-bottom:24px; margin-top:4px; }
+
+/* ─ Sticky CTA ─ */
+.pw-sticky-cta {
+  flex-shrink:0;
+  padding:0 20px 36px;
+  background:var(--bg);
+  position:relative;
+}
+.pw-sticky-cta::before {
+  content:'';
+  position:absolute;
+  top:-48px; left:0; right:0; height:48px;
+  background:linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events:none;
+}
+
+.pw-plan {
+  border-radius:18px;
+  border:1.5px solid var(--border2);
+  background:var(--surf);
+  padding:14px 16px; cursor:pointer;
+  transition:border-color .22s, background .22s;
+  position:relative;
+  display:flex; align-items:center;
+  justify-content:space-between;
+}
+.pw-plan.sel { border-color:var(--accent); background:rgba(201,75,224,0.08); }
+.pw-badge {
+  position:absolute; top:-11px; right:16px;
+  background:var(--grad); color:#fff;
+  font-size:10px; font-weight:700;
+  letter-spacing:.5px; padding:3px 10px;
+  border-radius:99px;
+}
+.pw-plan-name { font-size:15px; font-weight:700; color:#fff; letter-spacing:-0.2px; }
+.pw-plan-sub  { font-size:12px; color:var(--text2); margin-top:2px; }
+.pw-plan-price { font-size:19px; font-weight:800; color:#fff; text-align:right; }
+.pw-plan-per  { font-size:11px; font-weight:400; color:var(--text2); }
+.pw-radio {
+  width:20px; height:20px; border-radius:50%;
+  border:2px solid var(--border2); margin-left:10px;
+  flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  transition:border-color .2s, background .2s;
+}
+.pw-plan.sel .pw-radio { border-color:var(--accent); background:var(--accent); }
+.pw-plan.sel .pw-radio::after { content:''; width:8px; height:8px; border-radius:50%; background:#fff; }
+
+/* ─ CTA ─ */
+.pw-cta {
+  display:block; width:calc(100% - 40px);
+  margin:0 auto 8px; height:54px;
+  border-radius:99px; border:none;
+  background:var(--grad); color:#fff;
+  font-size:17px; font-weight:700;
+  letter-spacing:-0.2px; cursor:pointer;
+  box-shadow:0 8px 30px rgba(201,75,224,0.4);
+  transition:transform .15s;
+  position:relative; overflow:hidden; font-family:var(--font);
+}
+.pw-cta::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.14),transparent); }
+.pw-cta:active { transform:scale(.97); }
+
+.pw-legal {
+  display:flex; justify-content:center; gap:16px;
+  font-size:11px; color:var(--text3); margin-bottom:20px;
+}
+.pw-legal a { color:var(--text3); text-decoration:none; }
+.pw-legal a:hover { color:var(--text2); }
+
+.pw-divider { height:1px; background:var(--border); margin:4px 20px 20px; }
+
+/* ─ Benefits ─ */
+.pw-bens { padding:0 20px; margin-bottom:20px; }
+.pw-bens-title { font-size:18px; font-weight:700; color:#fff; letter-spacing:-0.4px; margin-bottom:12px; }
+.pw-ben {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.pw-ben:last-child { border-bottom:none; }
+.pw-check {
+  width:22px; height:22px; border-radius:50%;
+  background:rgba(201,75,224,0.14);
+  border:1px solid rgba(201,75,224,0.3);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.pw-check svg { width:11px; height:11px; }
+.pw-ben-txt { font-size:14px; font-weight:500; color:rgba(255,255,255,.85); }
+
+/* ─ Featured card ─ */
+.pw-featured {
+  margin:0 20px 20px; border-radius:20px;
+  height:170px; overflow:hidden;
+  position:relative; background:linear-gradient(160deg,#1a0830,#08080f);
+  display:flex; align-items:center; justify-content:center;
+}
+.pw-feat-glow {
+  position:absolute; width:220px; height:220px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(201,75,224,0.22),transparent 70%);
+  animation:pw-fg 3s ease-in-out infinite alternate;
+}
+@keyframes pw-fg { 0%{transform:scale(.88);} 100%{transform:scale(1.12);} }
+
+/* Reuse photo-card system for featured */
+.pw-feat-person {
+  position:absolute; inset:0;
+  --body:rgba(225,185,155,0.25); --head:rgba(225,185,155,0.3); --hair:rgba(25,12,4,0.82);
+}
+.pw-feat-person::before {
+  content:''; position:absolute; bottom:0; left:50%;
+  transform:translateX(-50%);
+  width:45%; height:75%;
+  background:var(--body); border-radius:46% 46% 0 0; z-index:1;
+}
+.pw-feat-person::after {
+  content:''; position:absolute; bottom:60%; left:50%;
+  transform:translateX(-50%);
+  width:24%; aspect-ratio:1;
+  background:var(--head); border-radius:50%; z-index:2;
+}
+.pw-feat-label {
+  position:absolute; bottom:12px; left:16px; right:16px;
+  font-size:13px; font-weight:600; color:#fff;
+  text-align:center; z-index:10;
+  text-shadow:0 2px 12px rgba(0,0,0,0.8);
+}
+
+/* ─ Social proof ─ */
+.pw-social { padding:0 20px; margin-bottom:20px; text-align:center; }
+.pw-soc-title { font-size:20px; font-weight:800; letter-spacing:-.5px; color:#fff; margin-bottom:14px; }
+
+.pw-mosaic {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:4px; margin-bottom:16px;
+  border-radius:14px; overflow:hidden; height:110px;
+}
+.pw-mos-cell { /* Uses photo-card system */ border-radius:6px; }
+
+.pw-big-stat { font-size:34px; font-weight:800; letter-spacing:-1px; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:2px; }
+.pw-big-sub  { font-size:13px; color:var(--text2); margin-bottom:12px; }
+.pw-stars    { font-size:18px; margin-bottom:4px; letter-spacing:2px; }
+.pw-app-rating { font-size:12px; color:var(--text2); margin-bottom:16px; }
+
+/* Review card */
+.pw-rev {
+  background:var(--surf); border:1px solid var(--border);
+  border-radius:16px; padding:14px; text-align:left; margin-bottom:14px;
+}
+.pw-rev-head { display:flex; align-items:center; gap:9px; margin-bottom:8px; }
+.pw-rev-ava {
+  width:32px; height:32px; border-radius:50%;
+  background:var(--grad); display:flex; align-items:center; justify-content:center;
+  font-size:15px; flex-shrink:0;
+}
+.pw-rev-name { font-size:13px; font-weight:600; color:#fff; }
+.pw-rev-date { font-size:11px; color:var(--text3); }
+.pw-rev-stars { font-size:12px; margin-bottom:6px; }
+.pw-rev-text { font-size:13px; color:rgba(255,255,255,.6); line-height:1.5; }
+
+/* Guarantee */
+.pw-guar {
+  margin:0 20px 20px; background:var(--surf);
+  border:1px solid rgba(201,75,224,0.2);
+  border-radius:16px; padding:15px;
+  display:flex; align-items:center; gap:12px;
+}
+.pw-guar-ico { font-size:26px; flex-shrink:0; }
+.pw-guar-title { font-size:14px; font-weight:700; color:#fff; margin-bottom:2px; }
+.pw-guar-desc  { font-size:12px; color:var(--text2); line-height:1.4; }
+
+
+/* ═════════════════════════════════
+   S6 — SUCCESS
+═════════════════════════════════ */
+#s-success {
+  background:var(--bg);
+  align-items:center; justify-content:center;
+  text-align:center; padding:40px;
+}
+.suc-orb {
+  width:96px; height:96px; border-radius:50%;
+  background:var(--grad);
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 24px;
+  box-shadow:0 0 60px rgba(201,75,224,0.5);
+  animation:orb-pop .55s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes orb-pop { from{transform:scale(0);opacity:0;} to{transform:scale(1);opacity:1;} }
+.suc-title { font-size:28px; font-weight:800; letter-spacing:-.8px; color:#fff; margin-bottom:10px; }
+.suc-desc  { font-size:15px; color:var(--text2); line-height:1.6; margin-bottom:36px; max-width:270px; }
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+
+  <!-- Status bar -->
+  <div class="status">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 17 12"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="4.5" y="4" width="3" height="8" rx="1"/><rect x="9" y="1.5" width="3" height="10.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".4"/></svg>
+      <svg viewBox="0 0 16 12"><path d="M8 9.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM8 5.5C10.2 5.5 12.2 6.4 13.6 7.9L15 6.3C13.2 4.4 10.7 3.3 8 3.3S2.8 4.4 1 6.3l1.4 1.6C3.8 6.4 5.8 5.5 8 5.5zM8 1.5C11.4 1.5 14.4 3 16.5 5.3L16 5.9C14 3.7 11.2 2.3 8 2.3S2 3.7 0 5.9l-.5-.6C1.6 3 4.6 1.5 8 1.5z"/></svg>
+      <svg viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="white" stroke-width="1" fill="none" opacity=".5"/><rect x="22.5" y="3.5" width="2" height="5" rx="1" fill="white" opacity=".4"/><rect x="1.5" y="2.5" width="16" height="7" rx="2" fill="white"/></svg>
+    </div>
+  </div>
+
+
+  <!-- ══ S1: SPLASH ══ -->
+  <div class="screen active" id="s-splash">
+    <div class="mosaic" id="mosaic"></div>
+    <div class="splash-overlay"></div>
+    <div class="splash-bottom">
+      <div class="splash-badge">
+        <div class="splash-stars">⭐⭐⭐⭐⭐</div>
+        <div class="splash-stat">
+          <svg class="splash-laurel" viewBox="0 0 40 58" width="36" height="52" fill="none">
+            <path d="M22 56 C18 48 12 36 10 22 C8 10 14 4 22 4" stroke="rgba(255,255,255,.55)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M20 48 Q4 48 4 38 Q14 36 20 48Z" fill="rgba(255,255,255,.78)"/>
+            <path d="M16 37 Q0 35 2 25 Q12 24 16 37Z" fill="rgba(255,255,255,.78)"/>
+            <path d="M12 26 Q0 22 4 12 Q14 14 12 26Z" fill="rgba(255,255,255,.74)"/>
+            <path d="M14 15 Q8 6 16 3 Q22 8 14 15Z"  fill="rgba(255,255,255,.70)"/>
+          </svg>
+          <div class="splash-stat-text">1M+ Videos<br>Created</div>
+          <svg class="splash-laurel flip" viewBox="0 0 40 58" width="36" height="52" fill="none">
+            <path d="M22 56 C18 48 12 36 10 22 C8 10 14 4 22 4" stroke="rgba(255,255,255,.55)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M20 48 Q4 48 4 38 Q14 36 20 48Z" fill="rgba(255,255,255,.78)"/>
+            <path d="M16 37 Q0 35 2 25 Q12 24 16 37Z" fill="rgba(255,255,255,.78)"/>
+            <path d="M12 26 Q0 22 4 12 Q14 14 12 26Z" fill="rgba(255,255,255,.74)"/>
+            <path d="M14 15 Q8 6 16 3 Q22 8 14 15Z"  fill="rgba(255,255,255,.70)"/>
+          </svg>
+        </div>
+      </div>
+      <div class="splash-title">Welcome to<br>Tvorra 🔥</div>
+      <div class="splash-sub">Your ultimate AI companion<br>to video creation</div>
+      <button class="btn-splash" onclick="nav('s-gender')">Let's Start</button>
+      <div class="splash-terms">By continuing, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a></div>
+    </div>
+  </div>
+
+
+  <!-- ══ S2: GENDER ══ -->
+  <div class="screen" id="s-gender">
+    <div style="height:60px;flex-shrink:0"></div>
+    <div class="prog">
+      <div class="prog-s active"></div>
+      <div class="prog-s"></div>
+      <div class="prog-s"></div>
+    </div>
+    <button class="back" onclick="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>Back
+    </button>
+
+    <div class="s-body">
+      <div style="height:12px"></div>
+      <div class="s-title">Who are you<br>creating for?</div>
+      <div class="s-sub">We'll personalise your feed</div>
+
+      <div class="list-row" onclick="pickGender('female',this)">
+        <span class="row-icon">👩</span>
+        <div class="row-info">
+          <div class="row-name">Female</div>
+          <div class="row-desc">Personalised for you</div>
+        </div>
+        <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <div class="list-row" onclick="pickGender('male',this)">
+        <span class="row-icon">👨</span>
+        <div class="row-info">
+          <div class="row-name">Male</div>
+          <div class="row-desc">Personalised for you</div>
+        </div>
+        <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <div class="list-row" onclick="pickGender('other',this)">
+        <span class="row-icon">🧑</span>
+        <div class="row-info">
+          <div class="row-name">Other</div>
+          <div class="row-desc">Show me everything</div>
+        </div>
+        <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══ S3: EFFECT PICKER ══ -->
+  <div class="screen" id="s-effect">
+    <div style="height:60px;flex-shrink:0"></div>
+    <div class="prog">
+      <div class="prog-s done"></div>
+      <div class="prog-s active"></div>
+      <div class="prog-s"></div>
+    </div>
+    <button class="back" onclick="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>Back
+    </button>
+
+    <div class="effect-scroll">
+      <div style="height:10px"></div>
+      <div class="s-title">What brings<br>you here?</div>
+      <div class="s-sub">We'll show you the best content first</div>
+
+      <div class="eff-row" onclick="pickEffect('kisses',this)">
+        <div class="eff-thumb photo-card et-kisses"><div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div></div>
+        <div class="eff-info">
+          <div class="eff-tag">Romantic</div>
+          <div class="eff-name">AI Kisses</div>
+          <div class="eff-desc">Magical romantic moments with AI</div>
+        </div>
+        <svg class="eff-chevron" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <div class="eff-row" onclick="pickEffect('dances',this)">
+        <div class="eff-thumb photo-card et-dances"><div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div></div>
+        <div class="eff-info">
+          <div class="eff-tag">Trending</div>
+          <div class="eff-name">Viral Dances</div>
+          <div class="eff-desc">TikTok-ready dance videos</div>
+        </div>
+        <svg class="eff-chevron" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <div class="eff-row" onclick="pickEffect('hugs',this)">
+        <div class="eff-thumb photo-card et-hugs"><div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div></div>
+        <div class="eff-info">
+          <div class="eff-tag">Emotional</div>
+          <div class="eff-name">Hugs Nostalgia</div>
+          <div class="eff-desc">Heartwarming reunion moments</div>
+        </div>
+        <svg class="eff-chevron" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <div class="eff-row" onclick="pickEffect('tiktok',this)">
+        <div class="eff-thumb photo-card et-tiktok"><div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div></div>
+        <div class="eff-info">
+          <div class="eff-tag">Viral</div>
+          <div class="eff-name">TikTok Trends</div>
+          <div class="eff-desc">Latest viral formats & challenges</div>
+        </div>
+        <svg class="eff-chevron" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <div class="eff-row" onclick="pickEffect('aivid',this)">
+        <div class="eff-thumb photo-card et-aivid"><div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div></div>
+        <div class="eff-info">
+          <div class="eff-tag">Create</div>
+          <div class="eff-name">AI Videos</div>
+          <div class="eff-desc">Stunning AI-generated clips</div>
+        </div>
+        <svg class="eff-chevron" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <div class="eff-row" onclick="pickEffect('t2v',this)">
+        <div class="eff-thumb photo-card et-t2v"><div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div></div>
+        <div class="eff-info">
+          <div class="eff-tag">Generate</div>
+          <div class="eff-name">Text To Video</div>
+          <div class="eff-desc">Turn words into video magic</div>
+        </div>
+        <svg class="eff-chevron" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <div class="eff-row" onclick="pickEffect('none',this)">
+        <div class="eff-thumb photo-card et-none"><div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div></div>
+        <div class="eff-info">
+          <div class="eff-tag">Explore</div>
+          <div class="eff-name">None of These</div>
+          <div class="eff-desc">Show me everything Tvorra has</div>
+        </div>
+        <svg class="eff-chevron" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div style="height:4px"></div>
+    </div>
+
+    <div class="sticky-cta">
+      <button class="btn" id="eff-btn" disabled onclick="showPreviews()">See Your Content</button>
+    </div>
+  </div>
+
+
+  <!-- ══ S4: PREVIEW ══ -->
+  <div class="screen" id="s-preview">
+    <div class="preview-wrap">
+      <div class="preview-track" id="preview-track"></div>
+      <div class="ps-dots" id="ps-dots"></div>
+    </div>
+    <div class="ps-cta">
+      <button class="ps-btn" id="ps-btn" onclick="nextSlide()">Next</button>
+      <div class="ps-skip" onclick="nav('s-loading')">Skip</div>
+    </div>
+  </div>
+
+
+  <!-- ══ S4.5: LOADING ══ -->
+  <div class="screen" id="s-loading">
+    <div style="height:60px;flex-shrink:0"></div>
+    <div class="load-wrap">
+      <div class="load-title">Preparing...</div>
+      <div id="load-steps">
+        <div class="load-step" id="ls-0"><div class="load-ico"></div><span>Browsing all available effects</span></div>
+        <div class="load-step" id="ls-1"><div class="load-ico"></div><span>Analyzing your preferences</span></div>
+        <div class="load-step" id="ls-2"><div class="load-ico"></div><span>Creating your perfect AI styles</span></div>
+        <div class="load-step" id="ls-3"><div class="load-ico"></div><span>Crafting your feed</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══ S5: PAYWALL ══ -->
+  <div class="screen" id="s-paywall">
+    <button class="pw-x" onclick="goBack()">✕</button>
+
+    <div class="pw-scroll">
+      <!-- Collage header -->
+      <div class="pw-collage" id="pw-collage"></div>
+
+      <!-- Offer -->
+      <div class="pw-offer">
+        <div class="pw-title">Go viral with<br><span>Tvorra Pro</span></div>
+        <div class="pw-timer-row">
+          <span class="pw-timer-lbl">Offer ends in</span>
+          <div class="pw-timer" id="pw-timer">09:59</div>
+        </div>
+      </div>
+
+      <!-- Plans -->
+      <div class="pw-plans">
+        <div class="pw-plan sel" id="plan-annual" onclick="selPlan('annual')">
+          <div class="pw-badge">Save 92%</div>
+          <div>
+            <div class="pw-plan-name">Yearly Membership 🏆</div>
+            <div class="pw-plan-sub">$59.99 USD / year</div>
+          </div>
+          <div>
+            <div class="pw-plan-price">$1.15<span class="pw-plan-per">/wk</span></div>
+          </div>
+          <div class="pw-radio"></div>
+        </div>
+
+        <div class="pw-plan" id="plan-weekly" onclick="selPlan('weekly')">
+          <div>
+            <div class="pw-plan-name">Weekly Membership</div>
+            <div class="pw-plan-sub">$6.99 USD</div>
+          </div>
+          <div>
+            <div class="pw-plan-price">$6.99<span class="pw-plan-per">/wk</span></div>
+          </div>
+          <div class="pw-radio"></div>
+        </div>
+      </div>
+
+      <!-- Benefits -->
+      <div class="pw-bens">
+        <div class="pw-bens-title">Plan's Benefits</div>
+        <div class="pw-ben"><div class="pw-check"><svg viewBox="0 0 24 24" fill="none" stroke="#C94BE0" stroke-width="2.8"><polyline points="20 6 9 17 4 12"/></svg></div><div class="pw-ben-txt">Unlimited AI Video Generation</div></div>
+        <div class="pw-ben"><div class="pw-check"><svg viewBox="0 0 24 24" fill="none" stroke="#C94BE0" stroke-width="2.8"><polyline points="20 6 9 17 4 12"/></svg></div><div class="pw-ben-txt">Access to 500+ Premium Effects</div></div>
+        <div class="pw-ben"><div class="pw-check"><svg viewBox="0 0 24 24" fill="none" stroke="#C94BE0" stroke-width="2.8"><polyline points="20 6 9 17 4 12"/></svg></div><div class="pw-ben-txt">New Trending Effects Every Week</div></div>
+        <div class="pw-ben"><div class="pw-check"><svg viewBox="0 0 24 24" fill="none" stroke="#C94BE0" stroke-width="2.8"><polyline points="20 6 9 17 4 12"/></svg></div><div class="pw-ben-txt">4K Export Without Watermark</div></div>
+        <div class="pw-ben"><div class="pw-check"><svg viewBox="0 0 24 24" fill="none" stroke="#C94BE0" stroke-width="2.8"><polyline points="20 6 9 17 4 12"/></svg></div><div class="pw-ben-txt">Priority Processing in Seconds</div></div>
+      </div>
+
+      <!-- Featured person card -->
+      <div class="pw-featured">
+        <div class="pw-feat-glow"></div>
+        <div class="pw-feat-person"></div>
+        <div class="pw-feat-label">AI Videos that make people stop scrolling</div>
+      </div>
+
+      <!-- Social proof -->
+      <div class="pw-social">
+        <div class="pw-soc-title">Loved by Thousands<br>of Happy Users</div>
+        <div class="pw-mosaic" id="pw-mosaic"></div>
+        <div class="pw-big-stat">10M+</div>
+        <div class="pw-big-sub">Active users worldwide</div>
+        <div class="pw-stars">⭐⭐⭐⭐⭐</div>
+        <div class="pw-app-rating">Rated 4.8 on the App Store</div>
+
+        <div class="pw-rev">
+          <div class="pw-rev-head">
+            <div class="pw-rev-ava" style="font-size:12px;font-weight:700;letter-spacing:-.3px">AW</div>
+            <div>
+              <div class="pw-rev-name">Amanda Wilson</div>
+              <div class="pw-rev-date">2025-05-13</div>
+            </div>
+          </div>
+          <div class="pw-rev-stars">⭐⭐⭐⭐⭐</div>
+          <div class="pw-rev-text">"Using Tvorra to create viral videos is amazing — I'd recommend it to everybody! My TikTok absolutely blew up 🔥"</div>
+        </div>
+      </div>
+
+      <!-- Guarantee -->
+      <div class="pw-guar">
+        <div class="pw-guar-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none"><path d="M12 2L3 6v6c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V6L12 2z" fill="rgba(201,75,224,0.25)" stroke="rgba(201,75,224,0.7)" stroke-width="1.5"/><polyline points="9 12 11 14 15 10" stroke="rgba(201,75,224,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="pw-guar-title">14-Day Money-Back Guarantee</div>
+          <div class="pw-guar-desc">Not satisfied? Full refund within 14 days, no questions asked.</div>
+        </div>
+      </div>
+
+      <div style="height:24px"></div>
+    </div>
+
+    <!-- Single sticky CTA -->
+    <div class="pw-sticky-cta">
+      <button class="pw-cta" onclick="nav('s-success')">Continue</button>
+      <div class="pw-legal"><a href="#">Terms of Use</a><a href="#">Privacy Policy</a><a href="#">Restore</a></div>
+    </div>
+  </div>
+
+
+  <!-- ══ S6: SUCCESS ══ -->
+  <div class="screen" id="s-success">
+    <div style="height:54px"></div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px">
+      <div class="suc-orb"><svg viewBox="0 0 48 48" width="48" height="48" fill="none"><path d="M24 8l3.6 11H38l-9.3 6.7 3.6 11L24 30l-8.3 6.7 3.6-11L10 19h10.4z" fill="rgba(255,255,255,0.95)"/><circle cx="24" cy="24" r="22" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/></svg></div>
+      <div class="suc-title">You're all set!</div>
+      <div class="suc-desc">Welcome to Tvorra Pro. Your 3-day free trial has started — enjoy unlimited AI videos.</div>
+      <button class="btn" onclick="nav('s-splash')">Start Creating</button>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+// ── STATE ──
+let _hist = ['s-splash'];
+let _effect = null, _slide = 0, _total = 0;
+
+// ── NAV ──
+function nav(id) {
+  const cur = document.querySelector('.screen.active');
+  if (cur) { cur.classList.add('exit'); cur.classList.remove('active'); setTimeout(() => cur.classList.remove('exit'), 370); }
+  const nxt = document.getElementById(id);
+  if (nxt) { nxt.classList.add('active'); _hist.push(id); }
+  if (id === 's-loading') startLoading();
+  if (id === 's-paywall') startTimer();
+}
+
+function goBack() {
+  if (_hist.length <= 1) return;
+  _hist.pop();
+  const prevId = _hist[_hist.length - 1];
+  const cur = document.querySelector('.screen.active');
+  if (cur) {
+    cur.style.cssText = 'transition:opacity .34s,transform .34s;opacity:0;transform:translateX(26px);pointer-events:none';
+    cur.classList.remove('active');
+    setTimeout(() => cur.style.cssText = '', 370);
+  }
+  const prev = document.getElementById(prevId);
+  if (prev) {
+    prev.style.cssText = 'opacity:0;transform:translateX(-26px)';
+    prev.classList.add('active');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      prev.style.cssText = 'transition:opacity .34s,transform .34s;opacity:1;transform:translateX(0)';
+      setTimeout(() => prev.style.cssText = '', 380);
+    }));
+  }
+}
+
+// ── GENDER ──
+function pickGender(g, el) {
+  document.querySelectorAll('#s-gender .list-row').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+  setTimeout(() => nav('s-effect'), 200);
+}
+
+// ── EFFECT ──
+function pickEffect(e, el) {
+  document.querySelectorAll('.eff-row').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+  _effect = e;
+  document.getElementById('eff-btn').disabled = false;
+}
+
+// ── PREVIEW DATA ──
+const PV = {
+  kisses:[
+    {sc:'#1a0010',body:'rgba(240,190,160,0.26)',head:'rgba(240,190,160,0.32)',hair:'rgba(20,8,3,0.82)',gc:'rgba(255,60,120,0.2)',str:'linear-gradient(135deg,rgba(255,60,120,0.07),transparent 50%)',badge:'AI Kisses',title:'Magical Kiss\nMoments',desc:'AI transforms your photos into heartwarming romantic scenes that go viral',decos:[{t:'deco-heart',c:'rgba(255,80,120,0.75)',x:'10%',y:'12%',fs:'26px',op:.5,d:'3s',dl:'0s'},{t:'deco-spark',c:'rgba(255,160,200,0.7)',x:'72%',y:'10%',fs:'20px',op:.45,d:'3.5s',dl:'.4s'},{t:'deco-spark',c:'rgba(255,220,240,0.6)',x:'80%',y:'55%',fs:'14px',op:.35,d:'2.5s',dl:'.8s'},{t:'deco-diamond',c:'rgba(255,100,160,0.65)',x:'8%',y:'60%',fs:'20px',op:.4,d:'4s',dl:'1.2s'}]},
+    {sc:'#220010',body:'rgba(235,185,155,0.26)',head:'rgba(235,185,155,0.32)',hair:'rgba(15,6,2,0.85)',gc:'rgba(255,40,100,0.2)',str:'linear-gradient(135deg,rgba(255,40,100,0.06),transparent 50%)',badge:'AI Kisses',title:'Going Viral\nEvery Day',desc:'Thousands of couples share their AI moments every day',decos:[{t:'deco-heart',c:'rgba(255,60,120,0.75)',x:'12%',y:'14%',fs:'24px',op:.5,d:'3s',dl:'0s'},{t:'deco-circle',c:'rgba(255,180,210,0.5)',x:'73%',y:'11%',fs:'18px',op:.4,d:'3.2s',dl:'.5s'},{t:'deco-spark',c:'rgba(255,120,180,0.65)',x:'79%',y:'57%',fs:'20px',op:.35,d:'2.8s',dl:'1s'}]},
+    {sc:'#180015',body:'rgba(230,180,150,0.26)',head:'rgba(230,180,150,0.32)',hair:'rgba(12,5,2,0.85)',gc:'rgba(220,50,180,0.2)',str:'linear-gradient(135deg,rgba(220,50,180,0.06),transparent 50%)',badge:'AI Kisses',title:'Any Photo,\nAny Style',desc:'Upload a selfie — let Tvorra create the magic in seconds',decos:[{t:'deco-heart',c:'rgba(220,60,180,0.75)',x:'10%',y:'15%',fs:'26px',op:.5,d:'3.5s',dl:'0s'},{t:'deco-spark',c:'rgba(255,80,200,0.7)',x:'74%',y:'12%',fs:'22px',op:.5,d:'3s',dl:'.6s'},{t:'deco-circle',c:'rgba(255,200,240,0.45)',x:'81%',y:'58%',fs:'14px',op:.3,d:'2.5s',dl:'1.1s'}]},
+  ],
+  dances:[
+    {sc:'#0a0022',body:'rgba(200,165,135,0.24)',head:'rgba(200,165,135,0.3)',hair:'rgba(10,5,2,0.85)',gc:'rgba(140,60,255,0.22)',str:'linear-gradient(135deg,rgba(140,60,255,0.07),transparent 50%)',badge:'Viral Dances',title:'Trending Dance\nVideos',desc:'Put yourself in the hottest TikTok dance challenges instantly',decos:[{t:'deco-diamond',c:'rgba(160,100,255,0.75)',x:'11%',y:'13%',fs:'24px',op:.5,d:'2.5s',dl:'0s'},{t:'deco-spark',c:'rgba(255,180,60,0.7)',x:'73%',y:'11%',fs:'20px',op:.45,d:'3s',dl:'.5s'},{t:'deco-spark',c:'rgba(200,160,255,0.65)',x:'79%',y:'57%',fs:'18px',op:.4,d:'2s',dl:'1s'},{t:'deco-circle',c:'rgba(180,120,255,0.5)',x:'8%',y:'62%',fs:'16px',op:.35,d:'3.5s',dl:'.8s'}]},
+    {sc:'#0d0028',body:'rgba(195,160,130,0.24)',head:'rgba(195,160,130,0.3)',hair:'rgba(8,4,1,0.88)',gc:'rgba(120,50,255,0.22)',str:'linear-gradient(135deg,rgba(120,50,255,0.07),transparent 50%)',badge:'Viral Dances',title:'Instant\nChoreography',desc:'No dancing skills needed — AI does it all for you',decos:[{t:'deco-diamond',c:'rgba(140,80,255,0.75)',x:'13%',y:'15%',fs:'22px',op:.5,d:'3s',dl:'0s'},{t:'deco-spark',c:'rgba(200,180,255,0.65)',x:'71%',y:'13%',fs:'18px',op:.4,d:'2.5s',dl:'.6s'},{t:'deco-spark',c:'rgba(255,180,60,0.65)',x:'78%',y:'57%',fs:'20px',op:.4,d:'3.2s',dl:'1s'}]},
+    {sc:'#0a0020',body:'rgba(190,155,125,0.24)',head:'rgba(190,155,125,0.3)',hair:'rgba(8,4,1,0.88)',gc:'rgba(160,80,255,0.22)',str:'linear-gradient(135deg,rgba(160,80,255,0.07),transparent 50%)',badge:'Viral Dances',title:'10M+ Videos\nCreated',desc:'Your turn to shine — join millions of creators on Tvorra',decos:[{t:'deco-circle',c:'rgba(180,100,255,0.6)',x:'10%',y:'13%',fs:'24px',op:.5,d:'3s',dl:'0s'},{t:'deco-spark',c:'rgba(200,160,255,0.7)',x:'72%',y:'11%',fs:'20px',op:.4,d:'2.8s',dl:'.4s'},{t:'deco-diamond',c:'rgba(255,180,60,0.65)',x:'79%',y:'58%',fs:'18px',op:.4,d:'3.5s',dl:'.9s'}]},
+  ],
+  hugs:[
+    {sc:'#1c1000',body:'rgba(215,178,145,0.26)',head:'rgba(215,178,145,0.32)',hair:'rgba(28,12,3,0.82)',gc:'rgba(255,175,50,0.18)',str:'linear-gradient(135deg,rgba(255,175,50,0.06),transparent 50%)',badge:'Hugs Nostalgia',title:'Relive the\nMemories',desc:'Recreate heartwarming reunion moments with the power of AI',decos:[{t:'deco-heart',c:'rgba(255,140,60,0.75)',x:'11%',y:'14%',fs:'24px',op:.5,d:'3s',dl:'0s'},{t:'deco-circle',c:'rgba(255,200,120,0.5)',x:'72%',y:'12%',fs:'18px',op:.4,d:'3.3s',dl:'.5s'},{t:'deco-spark',c:'rgba(255,180,80,0.65)',x:'79%',y:'58%',fs:'20px',op:.4,d:'2.8s',dl:'1s'}]},
+    {sc:'#1a0f00',body:'rgba(210,172,140,0.26)',head:'rgba(210,172,140,0.32)',hair:'rgba(24,10,2,0.84)',gc:'rgba(255,155,45,0.18)',str:'linear-gradient(135deg,rgba(255,155,45,0.06),transparent 50%)',badge:'Hugs Nostalgia',title:'Family\nMoments',desc:'Bring loved ones together through AI-powered memories',decos:[{t:'deco-spark',c:'rgba(255,200,80,0.7)',x:'13%',y:'14%',fs:'22px',op:.5,d:'3s',dl:'0s'},{t:'deco-circle',c:'rgba(255,210,140,0.5)',x:'71%',y:'12%',fs:'18px',op:.4,d:'3.2s',dl:'.6s'},{t:'deco-heart',c:'rgba(255,120,60,0.65)',x:'78%',y:'56%',fs:'16px',op:.35,d:'2.5s',dl:'1.1s'}]},
+    {sc:'#160d00',body:'rgba(205,168,136,0.26)',head:'rgba(205,168,136,0.32)',hair:'rgba(20,9,2,0.85)',gc:'rgba(255,140,40,0.18)',str:'linear-gradient(135deg,rgba(255,140,40,0.06),transparent 50%)',badge:'Hugs Nostalgia',title:'Deeply\nEmotional',desc:'Videos that make people cry — in the best way possible',decos:[{t:'deco-spark',c:'rgba(255,200,80,0.7)',x:'10%',y:'15%',fs:'24px',op:.5,d:'3.5s',dl:'0s'},{t:'deco-circle',c:'rgba(255,210,150,0.5)',x:'73%',y:'13%',fs:'18px',op:.4,d:'3s',dl:'.5s'},{t:'deco-diamond',c:'rgba(255,160,80,0.6)',x:'79%',y:'59%',fs:'16px',op:.3,d:'2.8s',dl:'1s'}]},
+  ],
+  tiktok:[
+    {sc:'#001510',body:'rgba(170,135,110,0.24)',head:'rgba(170,135,110,0.3)',hair:'rgba(5,3,1,0.88)',gc:'rgba(29,220,180,0.2)',str:'linear-gradient(135deg,rgba(29,220,180,0.06),transparent 50%)',badge:'TikTok Trends',title:'Always\non Trend',desc:"New effects every week based on what's going viral right now",decos:[{t:'deco-spark',c:'rgba(40,220,180,0.75)',x:'11%',y:'13%',fs:'24px',op:.5,d:'2.5s',dl:'0s'},{t:'deco-circle',c:'rgba(0,180,255,0.5)',x:'73%',y:'11%',fs:'20px',op:.4,d:'3s',dl:'.5s'},{t:'deco-diamond',c:'rgba(100,255,200,0.6)',x:'79%',y:'57%',fs:'16px',op:.35,d:'2s',dl:'1s'}]},
+    {sc:'#001520',body:'rgba(165,130,106,0.24)',head:'rgba(165,130,106,0.3)',hair:'rgba(4,2,1,0.9)',gc:'rgba(0,176,255,0.18)',str:'linear-gradient(135deg,rgba(0,176,255,0.06),transparent 50%)',badge:'TikTok Trends',title:'One Tap\nCreation',desc:'From photo to viral-ready video in seconds',decos:[{t:'deco-spark',c:'rgba(0,200,255,0.75)',x:'13%',y:'14%',fs:'22px',op:.5,d:'3s',dl:'0s'},{t:'deco-circle',c:'rgba(40,220,180,0.5)',x:'71%',y:'12%',fs:'18px',op:.4,d:'2.8s',dl:'.6s'},{t:'deco-diamond',c:'rgba(100,220,255,0.6)',x:'77%',y:'56%',fs:'16px',op:.35,d:'3.2s',dl:'1s'}]},
+    {sc:'#001018',body:'rgba(160,126,102,0.24)',head:'rgba(160,126,102,0.3)',hair:'rgba(4,2,1,0.9)',gc:'rgba(20,200,160,0.18)',str:'linear-gradient(135deg,rgba(20,200,160,0.06),transparent 50%)',badge:'TikTok Trends',title:'Grow Your\nFollowing',desc:'Creators using Tvorra see 3× more engagement',decos:[{t:'deco-spark',c:'rgba(40,200,160,0.75)',x:'11%',y:'13%',fs:'24px',op:.5,d:'3s',dl:'0s'},{t:'deco-spark',c:'rgba(0,180,255,0.65)',x:'72%',y:'11%',fs:'20px',op:.4,d:'2.5s',dl:'.5s'},{t:'deco-circle',c:'rgba(60,240,200,0.45)',x:'78%',y:'57%',fs:'14px',op:.3,d:'3.5s',dl:'1.1s'}]},
+  ],
+  aivid:[
+    {sc:'#080620',body:'rgba(195,158,130,0.24)',head:'rgba(195,158,130,0.3)',hair:'rgba(8,4,2,0.86)',gc:'rgba(180,80,255,0.22)',str:'linear-gradient(135deg,rgba(180,80,255,0.07),transparent 50%)',badge:'AI Videos',title:'Cinema-Quality\nAI Videos',desc:'State-of-the-art video generation from your photos',decos:[{t:'deco-spark',c:'rgba(200,140,255,0.75)',x:'11%',y:'13%',fs:'24px',op:.5,d:'3s',dl:'0s'},{t:'deco-diamond',c:'rgba(180,100,255,0.65)',x:'73%',y:'11%',fs:'18px',op:.4,d:'3.2s',dl:'.5s'},{t:'deco-spark',c:'rgba(220,180,255,0.6)',x:'79%',y:'57%',fs:'16px',op:.35,d:'2.5s',dl:'1s'},{t:'deco-circle',c:'rgba(160,80,255,0.5)',x:'8%',y:'62%',fs:'20px',op:.4,d:'4s',dl:'.8s'}]},
+    {sc:'#0c0830',body:'rgba(190,154,126,0.24)',head:'rgba(190,154,126,0.3)',hair:'rgba(7,3,1,0.87)',gc:'rgba(160,100,255,0.22)',str:'linear-gradient(135deg,rgba(160,100,255,0.07),transparent 50%)',badge:'AI Videos',title:'Limitless\nCreativity',desc:'Any scene, any style — let your imagination run wild',decos:[{t:'deco-diamond',c:'rgba(180,120,255,0.7)',x:'13%',y:'14%',fs:'22px',op:.5,d:'3.5s',dl:'0s'},{t:'deco-spark',c:'rgba(200,160,255,0.65)',x:'71%',y:'12%',fs:'18px',op:.4,d:'3s',dl:'.6s'},{t:'deco-circle',c:'rgba(160,100,255,0.5)',x:'77%',y:'56%',fs:'16px',op:.35,d:'2.8s',dl:'1s'}]},
+    {sc:'#07051a',body:'rgba(185,150,122,0.24)',head:'rgba(185,150,122,0.3)',hair:'rgba(6,3,1,0.88)',gc:'rgba(140,80,255,0.22)',str:'linear-gradient(135deg,rgba(140,80,255,0.07),transparent 50%)',badge:'AI Videos',title:'Share in\n4K Quality',desc:'Export without watermarks. No editing skills required.',decos:[{t:'deco-spark',c:'rgba(160,100,255,0.75)',x:'11%',y:'13%',fs:'24px',op:.5,d:'3s',dl:'0s'},{t:'deco-diamond',c:'rgba(200,160,255,0.65)',x:'72%',y:'11%',fs:'20px',op:.4,d:'3.5s',dl:'.5s'},{t:'deco-circle',c:'rgba(140,80,255,0.45)',x:'79%',y:'57%',fs:'14px',op:.3,d:'2.5s',dl:'1s'}]},
+  ],
+  t2v:[
+    {sc:'#011a0a',body:'rgba(155,122,98,0.24)',head:'rgba(155,122,98,0.3)',hair:'rgba(4,2,1,0.9)',gc:'rgba(67,220,120,0.18)',str:'linear-gradient(135deg,rgba(67,220,120,0.06),transparent 50%)',badge:'Text To Video',title:'Type It,\nSee It',desc:'Describe any scene and watch it come to life in seconds',decos:[{t:'deco-diamond',c:'rgba(60,200,120,0.75)',x:'11%',y:'13%',fs:'22px',op:.5,d:'3s',dl:'0s'},{t:'deco-spark',c:'rgba(100,220,160,0.65)',x:'72%',y:'11%',fs:'18px',op:.4,d:'3.2s',dl:'.5s'},{t:'deco-circle',c:'rgba(60,240,180,0.5)',x:'78%',y:'57%',fs:'16px',op:.35,d:'2.5s',dl:'1s'}]},
+    {sc:'#011510',body:'rgba(150,118,94,0.24)',head:'rgba(150,118,94,0.3)',hair:'rgba(3,2,1,0.9)',gc:'rgba(56,240,210,0.18)',str:'linear-gradient(135deg,rgba(56,240,210,0.06),transparent 50%)',badge:'Text To Video',title:'Zero Photo\nNeeded',desc:'Create stunning videos from just a text prompt',decos:[{t:'deco-spark',c:'rgba(80,220,180,0.75)',x:'13%',y:'14%',fs:'22px',op:.5,d:'3s',dl:'0s'},{t:'deco-circle',c:'rgba(60,240,210,0.5)',x:'71%',y:'12%',fs:'18px',op:.4,d:'2.8s',dl:'.6s'},{t:'deco-diamond',c:'rgba(100,255,190,0.6)',x:'77%',y:'56%',fs:'16px',op:.35,d:'3.5s',dl:'1s'}]},
+    {sc:'#021812',body:'rgba(145,114,90,0.24)',head:'rgba(145,114,90,0.3)',hair:'rgba(3,1,1,0.92)',gc:'rgba(50,210,145,0.18)',str:'linear-gradient(135deg,rgba(50,210,145,0.06),transparent 50%)',badge:'Text To Video',title:'Infinite\nStories',desc:'From one sentence to a cinematic experience',decos:[{t:'deco-spark',c:'rgba(60,210,145,0.75)',x:'11%',y:'13%',fs:'24px',op:.5,d:'3.5s',dl:'0s'},{t:'deco-circle',c:'rgba(80,200,160,0.5)',x:'72%',y:'11%',fs:'18px',op:.4,d:'3s',dl:'.5s'},{t:'deco-diamond',c:'rgba(100,240,180,0.6)',x:'78%',y:'57%',fs:'16px',op:.35,d:'2.8s',dl:'1s'}]},
+  ],
+  none:[
+    {sc:'#080620',body:'rgba(195,158,130,0.24)',head:'rgba(195,158,130,0.3)',hair:'rgba(8,4,2,0.86)',gc:'rgba(180,80,255,0.22)',str:'linear-gradient(135deg,rgba(180,80,255,0.07),transparent 50%)',badge:'Tvorra AI',title:'Create Any\nVideo',desc:'AI-powered videos for every moment, mood, and style',decos:[{t:'deco-spark',c:'rgba(201,75,224,0.75)',x:'11%',y:'13%',fs:'24px',op:.5,d:'3s',dl:'0s'},{t:'deco-diamond',c:'rgba(255,180,60,0.65)',x:'73%',y:'11%',fs:'20px',op:.4,d:'3.2s',dl:'.5s'},{t:'deco-circle',c:'rgba(160,80,255,0.5)',x:'79%',y:'57%',fs:'16px',op:.35,d:'2.5s',dl:'1s'}]},
+    {sc:'#1a0010',body:'rgba(240,190,160,0.26)',head:'rgba(240,190,160,0.32)',hair:'rgba(20,8,3,0.82)',gc:'rgba(255,60,120,0.2)',str:'linear-gradient(135deg,rgba(255,60,120,0.07),transparent 50%)',badge:'Tvorra AI',title:'Every Trend\nCovered',desc:'From romantic to viral — we have it all in one app',decos:[{t:'deco-heart',c:'rgba(255,80,120,0.75)',x:'11%',y:'13%',fs:'24px',op:.5,d:'3s',dl:'0s'},{t:'deco-circle',c:'rgba(180,100,255,0.55)',x:'73%',y:'11%',fs:'20px',op:.4,d:'3.2s',dl:'.5s'},{t:'deco-spark',c:'rgba(255,200,80,0.6)',x:'79%',y:'57%',fs:'14px',op:.3,d:'2.5s',dl:'1s'}]},
+    {sc:'#050520',body:'rgba(180,145,118,0.24)',head:'rgba(180,145,118,0.3)',hair:'rgba(6,3,1,0.88)',gc:'rgba(120,120,255,0.22)',str:'linear-gradient(135deg,rgba(120,120,255,0.07),transparent 50%)',badge:'Tvorra AI',title:'10M+ Videos\nCreated',desc:'Join millions of creators making magic every day',decos:[{t:'deco-diamond',c:'rgba(140,120,255,0.75)',x:'11%',y:'13%',fs:'24px',op:.5,d:'3s',dl:'0s'},{t:'deco-spark',c:'rgba(200,180,255,0.65)',x:'72%',y:'11%',fs:'20px',op:.4,d:'3.5s',dl:'.5s'},{t:'deco-circle',c:'rgba(160,140,255,0.5)',x:'78%',y:'57%',fs:'16px',op:.35,d:'2.8s',dl:'1s'}]},
+  ],
+};
+
+function showPreviews() {
+  if (!_effect) return;
+  const slides = PV[_effect] || PV.none;
+  _total = slides.length; _slide = 0;
+
+  const track = document.getElementById('preview-track');
+  const dots  = document.getElementById('ps-dots');
+  track.innerHTML = ''; dots.innerHTML = '';
+
+  slides.forEach((d, i) => {
+    const sl = document.createElement('div');
+    sl.className = 'preview-slide';
+    sl.innerHTML = `
+      <div class="ps-scene" style="background:${d.sc}">
+        <div class="ps-glow" style="--gc:${d.gc}"></div>
+        <div class="ps-streak" style="--str:${d.str}"></div>
+        <div class="ps-figure" style="--body:${d.body}"></div>
+        <div class="ps-head"   style="--head:${d.head}"></div>
+        <div class="ps-hair"   style="--hair:${d.hair}"></div>
+        ${d.decos.map(x=>`<div class="ps-deco ${x.t||'deco-spark'}" style="--x:${x.x};--y:${x.y};--sz:${x.fs};--op:${x.op};--d:${x.d};--dl:${x.dl};--dc:${x.c||'rgba(255,255,255,0.7)'}"></div>`).join('')}
+      </div>
+      <div class="ps-overlay"></div>
+      <div class="ps-content">
+        <div class="ps-badge">✦ ${d.badge}</div>
+        <div class="ps-title">${d.title.replace('\n','<br>')}</div>
+        <div class="ps-desc">${d.desc}</div>
+      </div>`;
+    track.appendChild(sl);
+
+    const dot = document.createElement('div');
+    dot.className = 'ps-dot' + (i===0?' active':'');
+    dots.appendChild(dot);
+  });
+
+  updatePsBtn();
+  nav('s-preview');
+}
+
+function nextSlide() {
+  if (_slide >= _total - 1) { nav('s-loading'); return; }
+  _slide++;
+  document.getElementById('preview-track').style.transform = `translateX(-${_slide*100}%)`;
+  document.querySelectorAll('.ps-dot').forEach((d,i) => d.classList.toggle('active', i===_slide));
+  updatePsBtn();
+}
+function updatePsBtn() {
+  document.getElementById('ps-btn').textContent = _slide >= _total-1 ? 'Continue →' : 'Next';
+}
+
+// ── PAYWALL ──
+function selPlan(p) {
+  ['annual','weekly'].forEach(x => document.getElementById('plan-'+x).classList.remove('sel'));
+  document.getElementById('plan-'+p).classList.add('sel');
+}
+
+function startLoading() {
+  const steps = document.querySelectorAll('#load-steps .load-step');
+  steps.forEach(s => { s.classList.remove('ls-active','ls-done'); });
+  const delays = [800, 1100, 1000, 900];
+  let i = 0;
+  function tick() {
+    if (i > 0) { steps[i-1].classList.remove('ls-active'); steps[i-1].classList.add('ls-done'); }
+    if (i < steps.length) {
+      steps[i].classList.add('ls-active');
+      i++;
+      setTimeout(tick, delays[i-1] || 900);
+    } else {
+      setTimeout(() => nav('s-paywall'), 500);
+    }
+  }
+  tick();
+}
+
+let _timerSecs = 9*60+59;
+function startTimer() {
+  clearInterval(window._ti);
+  window._ti = setInterval(() => {
+    if (_timerSecs <= 0) _timerSecs = 9*60+59;
+    _timerSecs--;
+    const el = document.getElementById('pw-timer');
+    if (el) el.textContent = `${String(Math.floor(_timerSecs/60)).padStart(2,'0')}:${String(_timerSecs%60).padStart(2,'0')}`;
+  }, 1000);
+}
+
+// ── MOSAIC BUILDER (splash) ──
+const PHOTO_TYPES = [
+  ['pt-f1','pt-m2','pt-f3'],
+  ['pt-m4','pt-f2','pt-m1'],
+  ['pt-f5','pt-m3','pt-f4'],
+  ['pt-m6','pt-f6','pt-m5'],
+];
+function buildMosaic() {
+  const m = document.getElementById('mosaic');
+  const flat = PHOTO_TYPES.flat();
+  flat.forEach((cls, i) => {
+    const cell = document.createElement('div');
+    cell.className = `mosaic-cell photo-card ${cls}`;
+    cell.style.cssText = `--d:${2.4+Math.random()*1.6}s;--dl:${i*0.11}s`;
+    cell.innerHTML = '<div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div>';
+    m.appendChild(cell);
+  });
+}
+
+// ── PAYWALL COLLAGE ──
+const PW_COL = ['pt-f1','pt-m2','pt-f4'];
+function buildPwCollage() {
+  const c = document.getElementById('pw-collage');
+  if (!c) return;
+  PW_COL.forEach(cls => {
+    const cell = document.createElement('div');
+    cell.className = `pw-col-cell photo-card ${cls}`;
+    cell.innerHTML = '<div class="photo-hair"></div><div class="photo-light"></div>';
+    c.appendChild(cell);
+  });
+}
+
+// ── PAYWALL MOSAIC ──
+const MOS_TYPES = ['pt-f1','pt-m1','pt-f2','pt-m2','pt-f3','pt-m3','pt-f4','pt-m4','pt-f5','pt-m5'];
+function buildPwMosaic() {
+  const m = document.getElementById('pw-mosaic');
+  if (!m) return;
+  MOS_TYPES.forEach(cls => {
+    const cell = document.createElement('div');
+    cell.className = `pw-mos-cell photo-card ${cls}`;
+    cell.innerHTML = '<div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div>';
+    m.appendChild(cell);
+  });
+}
+
+// ── SCALE TO FIT ──
+function scalePhone() {
+  const s = Math.min((innerWidth-40)/393, (innerHeight-40)/852, 1);
+  document.getElementById('phone').style.transform = `scale(${s})`;
+}
+scalePhone();
+window.addEventListener('resize', scalePhone);
+
+// ── INIT ──
+buildMosaic();
+buildPwCollage();
+buildPwMosaic();
+</script>
+</body>
+</html>
