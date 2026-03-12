@@ -694,7 +694,7 @@ html, body {
 
 /* ─ Collage header ─ */
 .pw-collage {
-  height:300px; position:relative;
+  height:460px; position:relative;
   display:grid; grid-template-columns:repeat(3,1fr);
   gap:3px; overflow:hidden; flex-shrink:0;
 }
@@ -705,8 +705,8 @@ html, body {
 .pw-collage::after {
   content:'';
   position:absolute; bottom:0; left:0; right:0;
-  height:180px;
-  background:linear-gradient(to bottom, transparent 0%, var(--bg) 75%);
+  height:220px;
+  background:linear-gradient(to bottom, transparent 0%, var(--bg) 80%);
   pointer-events:none; z-index:10;
 }
 
@@ -714,13 +714,14 @@ html, body {
 .pw-offer {
   padding:0 20px 4px; text-align:center;
   position:relative; z-index:2;
-  margin-top:-72px;
+  margin-top:-100px;
 }
 .pw-title {
-  font-size:32px; font-weight:800;
-  letter-spacing:-.9px; color:#fff;
+  font-size:26px; font-weight:800;
+  letter-spacing:-.5px; color:#fff;
+  white-space:nowrap;
   line-height:1.2; margin-bottom:14px;
-  text-shadow: 0 2px 24px rgba(0,0,0,0.6);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.8);
 }
 .pw-title span {
   background:var(--grad);
@@ -743,7 +744,7 @@ html, body {
 }
 
 /* ─ Plans ─ */
-.pw-plans { padding:0 20px; display:flex; flex-direction:column; gap:10px; margin-bottom:24px; margin-top:28px; }
+.pw-plans { padding:0 20px; display:flex; flex-direction:column; gap:10px; margin-bottom:24px; margin-top:20px; }
 
 /* ─ Sticky CTA ─ */
 .pw-sticky-cta {
@@ -1151,7 +1152,7 @@ html, body {
 
       <!-- Offer -->
       <div class="pw-offer">
-        <div class="pw-title">Go viral with<br><span>Tvorra Pro</span></div>
+        <div class="pw-title">Go viral with <span>Tvorra Pro</span></div>
         <div class="pw-timer-row">
           <span class="pw-timer-lbl">Offer ends in</span>
           <div class="pw-timer" id="pw-timer">09:59</div>
