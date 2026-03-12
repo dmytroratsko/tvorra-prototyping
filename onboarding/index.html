@@ -624,20 +624,6 @@ html, body {
   line-height:1.5; margin-bottom:16px;
 }
 
-/* Dot indicators */
-.ps-dots {
-  position:absolute; z-index:7;
-  bottom:158px; left:0; right:0;
-  display:flex; justify-content:center; gap:5px;
-}
-.ps-dot {
-  height:4px; border-radius:2px;
-  background:rgba(255,255,255,.25);
-  transition:width .3s, background .3s;
-  width:6px;
-}
-.ps-dot.active { width:22px; background:var(--accent); }
-
 /* Preview CTA area */
 .ps-cta {
   position:absolute; bottom:0; left:0; right:0;
@@ -655,12 +641,6 @@ html, body {
 }
 .ps-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent); }
 .ps-btn:active { transform:scale(.97); }
-.ps-skip {
-  text-align:center; font-size:14px;
-  color:rgba(255,255,255,.35);
-  cursor:pointer; transition:color .2s; padding:2px;
-}
-.ps-skip:hover { color:rgba(255,255,255,.6); }
 
 
 /* ═════════════════════════════════
@@ -1169,11 +1149,9 @@ html, body {
   <div class="screen" id="s-preview">
     <div class="preview-wrap">
       <div class="preview-track" id="preview-track"></div>
-      <div class="ps-dots" id="ps-dots"></div>
     </div>
     <div class="ps-cta">
       <button class="ps-btn" id="ps-btn" onclick="nextSlide()">Next</button>
-      <div class="ps-skip" onclick="nav('s-loading')">Skip</div>
     </div>
   </div>
 
@@ -1404,8 +1382,7 @@ function showPreviews() {
   _total = slides.length; _slide = 0;
 
   const track = document.getElementById('preview-track');
-  const dots  = document.getElementById('ps-dots');
-  track.innerHTML = ''; dots.innerHTML = '';
+  track.innerHTML = '';
 
   slides.forEach((d, i) => {
     const sl = document.createElement('div');
@@ -1427,9 +1404,6 @@ function showPreviews() {
       </div>`;
     track.appendChild(sl);
 
-    const dot = document.createElement('div');
-    dot.className = 'ps-dot' + (i===0?' active':'');
-    dots.appendChild(dot);
   });
 
   updatePsBtn();
@@ -1440,7 +1414,6 @@ function nextSlide() {
   if (_slide >= _total - 1) { nav('s-loading'); return; }
   _slide++;
   document.getElementById('preview-track').style.transform = `translateX(-${_slide*100}%)`;
-  document.querySelectorAll('.ps-dot').forEach((d,i) => d.classList.toggle('active', i===_slide));
   updatePsBtn();
 }
 function updatePsBtn() {
