@@ -1,9 +1,29 @@
-# Tvorra — Onboarding Prototype
+# Tvorra — Prototypes
 
-Clickable HTML/CSS/JS prototype of the Tvorra iOS app onboarding flow.
-Single file (`index.html`, ~1544 lines), no dependencies, no build step.
+Clickable HTML/CSS/JS prototypes for the Tvorra iOS app. Each screen flow is a self-contained `index.html` in its own subfolder.
 
-**Live:** https://dmytroratsko.github.io/tvorra-prototyping/
+## Prototypes
+
+| Folder | Description | Live |
+|--------|-------------|------|
+| `onboarding/` | Full onboarding flow (splash → gender → effect → preview → paywall → success) | [Open](https://dmytroratsko.github.io/tvorra-prototyping/onboarding/) |
+
+---
+
+## Adding a new prototype
+
+1. Create a new folder: `mkdir new-screen-name`
+2. Add `index.html` inside it
+3. Push to GitHub — it's live at `dmytroratsko.github.io/tvorra-prototyping/new-screen-name/`
+4. Add a row to the table above
+
+---
+
+## Onboarding Prototype
+
+Single file (`onboarding/index.html`, ~1544 lines), no dependencies, no build step.
+
+**Live:** https://dmytroratsko.github.io/tvorra-prototyping/onboarding/
 
 ---
 
@@ -138,11 +158,11 @@ Each slide:
 
 ## How to Update & Deploy
 
-Edit `index.html` locally, then from Terminal:
+Edit the file locally, then from Terminal:
 
 ```bash
 cd /Users/d.ratsko/Downloads/tvorra-onboarding
-git add index.html
+git add onboarding/index.html
 git commit -m "describe change"
 git push
 ```
