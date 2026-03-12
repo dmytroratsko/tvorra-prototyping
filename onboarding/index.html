@@ -93,26 +93,6 @@ html, body {
 .screen.active  { opacity:1; pointer-events:all; transform:translateX(0); }
 .screen.exit    { opacity:0; transform:translateX(-26px); pointer-events:none; }
 
-/* ── PROGRESS ── */
-.prog {
-  display:flex; gap:5px;
-  padding:0 20px; margin-top:14px; flex-shrink:0;
-}
-.prog-s {
-  flex:1; height:3px; border-radius:2px;
-  background:rgba(255,255,255,0.1);
-  transition:background .4s;
-  overflow:hidden; position:relative;
-}
-.prog-s.done   { background:var(--accent); }
-.prog-s.active { background:rgba(255,255,255,0.1); }
-.prog-s.active::after {
-  content:'';
-  position:absolute; inset:0;
-  background:var(--grad);
-  border-radius:2px;
-}
-
 /* ── BACK BTN ── */
 .back {
   background:none; border:none; cursor:pointer;
@@ -1006,11 +986,6 @@ html, body {
   <!-- ══ S2: GENDER ══ -->
   <div class="screen" id="s-gender">
     <div style="height:60px;flex-shrink:0"></div>
-    <div class="prog">
-      <div class="prog-s active"></div>
-      <div class="prog-s"></div>
-      <div class="prog-s"></div>
-    </div>
     <button class="back" onclick="goBack()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>Back
     </button>
@@ -1053,11 +1028,6 @@ html, body {
   <!-- ══ S3: EFFECT PICKER ══ -->
   <div class="screen" id="s-effect">
     <div style="height:60px;flex-shrink:0"></div>
-    <div class="prog">
-      <div class="prog-s done"></div>
-      <div class="prog-s active"></div>
-      <div class="prog-s"></div>
-    </div>
     <button class="back" onclick="goBack()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>Back
     </button>
