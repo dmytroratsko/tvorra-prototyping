@@ -955,120 +955,71 @@ html, body {
 .suc-desc  { font-size:15px; color:var(--text2); line-height:1.6; margin-bottom:36px; max-width:270px; }
 
 /* ═══════════════════════════════════
-   S7 — HOME (personalised feed card)
+   S7 — HOME (full-screen bottom-sheet)
 ═══════════════════════════════════ */
 #s-home { background:var(--bg); overflow:hidden; }
 
-.home-bg {
+/* Full-screen photo */
+.home-photo-bg {
   position:absolute; inset:0;
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:3px; opacity:.22; pointer-events:none;
+  background-size:cover; background-position:top center;
 }
-.home-bg .photo-card { border-radius:0; }
-.home-overlay {
-  position:absolute; inset:0; z-index:2;
-  background:rgba(8,8,15,.6);
-  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+
+/* Top dark vignette for status bar + bottom fade into bg */
+.home-photo-fade {
+  position:absolute; inset:0; z-index:1;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.28) 0%,
+    transparent 16%,
+    transparent 40%,
+    rgba(8,8,15,0.62) 60%,
+    var(--bg) 78%,
+    var(--bg) 100%
+  );
 }
-.home-sheet {
-  position:absolute; left:22px; right:22px;
-  top:68px; bottom:28px;
-  background:rgba(14,12,24,.97);
-  border-radius:28px; overflow:hidden;
-  z-index:10; display:flex; flex-direction:column;
-  box-shadow:0 24px 64px rgba(0,0,0,.6);
-}
-/* top controls */
+
+/* Controls: X + heart */
 .home-controls {
-  position:absolute; top:14px; left:14px; right:14px;
-  display:flex; justify-content:space-between; z-index:20;
+  position:absolute; top:56px; left:16px; right:16px;
+  display:flex; justify-content:space-between; z-index:10;
 }
 .home-ctrl-btn {
-  width:34px; height:34px; border-radius:50%;
-  background:rgba(0,0,0,.45); border:none; cursor:pointer;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(0,0,0,0.46); border:none; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
-  color:#fff;
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
 }
 .home-ctrl-btn svg { width:16px; height:16px; stroke:#fff; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
-/* big photo area */
-.home-card-wrap {
-  flex:1; position:relative; overflow:hidden;
+
+/* Bottom content */
+.home-bottom {
+  position:absolute; bottom:0; left:0; right:0;
+  z-index:2; padding:0 24px 44px;
 }
-.home-big-card {
-  position:absolute; inset:0;
-  display:flex; align-items:center; justify-content:center;
+.home-handle {
+  width:36px; height:4px;
+  background:rgba(255,255,255,0.22); border-radius:2px;
+  margin:0 auto 20px;
 }
-/* per-effect colour themes */
-.home-big-card.hc-kisses  { background:linear-gradient(160deg,#2a0d1e,#1a0828); }
-.home-big-card.hc-runway  { background:linear-gradient(160deg,#0a1628,#0d2240); }
-.home-big-card.hc-glam    { background:linear-gradient(160deg,#200e00,#2a1500); }
-.home-big-card.hc-tiktok  { background:linear-gradient(160deg,#001a20,#002a1a); }
-.home-big-card.hc-aivid   { background:linear-gradient(160deg,#0d0820,#1a0832); }
-/* CSS person inside big card */
-.home-person {
-  position:absolute; bottom:0; left:50%; transform:translateX(-50%);
-  width:64%; height:85%;
-}
-.home-person::before {
-  content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%);
-  width:70%; height:70%;
-  background:var(--hp-body,rgba(220,180,150,.35));
-  border-radius:50% 50% 0 0;
-}
-.home-person::after {
-  content:''; position:absolute; bottom:60%; left:50%; transform:translateX(-50%);
-  width:36%; aspect-ratio:1;
-  background:var(--hp-head,rgba(220,180,150,.4));
-  border-radius:50%;
-}
-.home-person .hp-hair {
-  position:absolute; bottom:75%; left:50%; transform:translateX(-50%);
-  width:40%; height:18%;
-  background:var(--hp-hair,rgba(20,10,5,.85));
-  border-radius:50% 50% 0 0; z-index:1;
-}
-.home-person .hp-glow {
-  position:absolute; inset:0;
-  background:var(--hp-light,linear-gradient(160deg,rgba(201,75,224,.18),transparent 55%));
-  z-index:2; pointer-events:none;
-}
-/* per-effect person colours */
-.hc-kisses  { --hp-body:rgba(240,185,160,.38); --hp-head:rgba(240,185,160,.43); --hp-hair:rgba(30,10,5,.88);  --hp-light:linear-gradient(160deg,rgba(220,80,140,.22),transparent 55%); }
-.hc-runway  { --hp-body:rgba(180,195,220,.32); --hp-head:rgba(180,195,220,.37); --hp-hair:rgba(10,15,25,.90); --hp-light:linear-gradient(160deg,rgba(80,140,220,.18),transparent 55%); }
-.hc-glam    { --hp-body:rgba(245,200,150,.40); --hp-head:rgba(245,200,150,.45); --hp-hair:rgba(25,8,2,.86);   --hp-light:linear-gradient(160deg,rgba(230,160,60,.20),transparent 55%); }
-.hc-tiktok  { --hp-body:rgba(160,225,195,.32); --hp-head:rgba(160,225,195,.37); --hp-hair:rgba(5,15,10,.88);  --hp-light:linear-gradient(160deg,rgba(60,200,120,.18),transparent 55%); }
-.hc-aivid   { --hp-body:rgba(185,165,230,.34); --hp-head:rgba(185,165,230,.39); --hp-hair:rgba(15,8,28,.88);  --hp-light:linear-gradient(160deg,rgba(130,80,255,.20),transparent 55%); }
-/* card label overlay */
-.home-card-label {
-  position:absolute; bottom:18px; left:18px; right:18px;
-  font-size:18px; font-weight:700; color:#fff; line-height:1.3;
-  text-shadow:0 2px 12px rgba(0,0,0,.8); z-index:5;
-}
-/* gradient fade at bottom of card */
-.home-card-fade {
-  position:absolute; bottom:0; left:0; right:0; height:120px;
-  background:linear-gradient(to bottom,transparent,rgba(0,0,0,.55));
-  z-index:4; pointer-events:none;
-}
-/* info section */
-.home-info {
-  padding:16px 20px 18px; flex-shrink:0;
+.home-label {
+  font-size:14px; color:rgba(255,255,255,0.55);
+  margin-bottom:6px;
 }
 .home-effect-name {
-  font-size:22px; font-weight:800; color:#fff;
-  letter-spacing:-.4px; margin-bottom:4px;
+  font-size:30px; font-weight:800; color:#fff;
+  letter-spacing:-1px; line-height:1.1; margin-bottom:8px;
 }
 .home-meta {
-  font-size:13px; color:var(--text2); display:flex; gap:10px;
-  margin-bottom:16px;
+  font-size:13px; color:rgba(255,255,255,0.4);
+  display:flex; gap:8px; margin-bottom:22px;
 }
-.home-meta-dot { opacity:.35; }
+.home-meta-dot { opacity:.4; }
 .home-start-btn {
-  width:100%; padding:15px;
+  width:100%; padding:16px;
   background:#fff; border:none; border-radius:16px;
   font-size:17px; font-weight:700; color:#0a0a14;
-  cursor:pointer; letter-spacing:-.2px;
-  transition:opacity .15s;
+  cursor:pointer; letter-spacing:-.2px; transition:opacity .15s;
 }
 .home-start-btn:active { opacity:.85; }
 </style>
@@ -1391,46 +1342,30 @@ html, body {
     </div>
   </div>
 
-  <!-- ══ S7: HOME (personalised feed card) ══ -->
+  <!-- ══ S7: HOME (full-screen bottom-sheet) ══ -->
   <div class="screen" id="s-home">
-    <!-- blurred bg -->
-    <div class="home-bg" id="home-bg"></div>
-    <div class="home-overlay"></div>
+    <div class="home-photo-bg" id="home-photo-bg"></div>
+    <div class="home-photo-fade"></div>
 
-    <!-- sheet -->
-    <div class="home-sheet">
-      <!-- controls -->
-      <div class="home-controls">
-        <button class="home-ctrl-btn" onclick="nav('s-splash')">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <button class="home-ctrl-btn" id="home-like-btn" onclick="toggleLike()">
-          <svg id="home-like-ico" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </button>
-      </div>
+    <div class="home-controls">
+      <button class="home-ctrl-btn" onclick="nav('s-splash')">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <button class="home-ctrl-btn" id="home-like-btn" onclick="toggleLike()">
+        <svg id="home-like-ico" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+    </div>
 
-      <!-- photo card -->
-      <div class="home-card-wrap">
-        <div class="home-big-card" id="home-big-card">
-          <div class="home-person" id="home-person">
-            <div class="hp-hair"></div>
-            <div class="hp-glow"></div>
-          </div>
-          <div class="home-card-fade"></div>
-          <div class="home-card-label" id="home-card-label"></div>
-        </div>
+    <div class="home-bottom">
+      <div class="home-handle"></div>
+      <div class="home-label" id="home-card-label"></div>
+      <div class="home-effect-name" id="home-effect-name"></div>
+      <div class="home-meta">
+        <span id="home-cat"></span>
+        <span class="home-meta-dot">·</span>
+        <span id="home-hits"></span>
       </div>
-
-      <!-- info + CTA -->
-      <div class="home-info">
-        <div class="home-effect-name" id="home-effect-name"></div>
-        <div class="home-meta">
-          <span id="home-cat"></span>
-          <span class="home-meta-dot">·</span>
-          <span id="home-hits"></span>
-        </div>
-        <button class="home-start-btn" onclick="nav('s-splash')">Try Now</button>
-      </div>
+      <button class="home-start-btn" onclick="nav('s-splash')">Try Now</button>
     </div>
   </div>
 
@@ -1691,17 +1626,17 @@ const PV_PHOTOS = {
   t2v:    [UP('1500648767791-00dcc994a43e',393,700), UP('1554151228-14d9def656e4',393,700), UP('1520813792240-56fc4a3765a7',393,700)],
   none:   [UP('1529626455594-4ff0802cfb7e',393,700), UP('1507003211169-0a1dd7228f2d',393,700), UP('1534528741775-53994a69daeb',393,700)],
 };
-// Home big card photo per effect
+// Home full-screen photo per effect (taller for full bleed)
 const HOME_PHOTOS = {
-  kisses: UP('1529626455594-4ff0802cfb7e',400,600),
-  dances: UP('1517841905240-472988babdf9',400,600),
-  hugs:   UP('1524504388940-b1c1722653e1',400,600),
-  runway: UP('1524504388940-b1c1722653e1',400,600),
-  glam:   UP('1534528741775-53994a69daeb',400,600),
-  tiktok: UP('1507003211169-0a1dd7228f2d',400,600),
-  aivid:  UP('1531746020798-e6953c6e8e04',400,600),
-  t2v:    UP('1472099645785-5658abf4ff4e',400,600),
-  none:   UP('1520813792240-56fc4a3765a7',400,600),
+  kisses: UP('1529626455594-4ff0802cfb7e',393,852),
+  dances: UP('1517841905240-472988babdf9',393,852),
+  hugs:   UP('1524504388940-b1c1722653e1',393,852),
+  runway: UP('1524504388940-b1c1722653e1',393,852),
+  glam:   UP('1534528741775-53994a69daeb',393,852),
+  tiktok: UP('1507003211169-0a1dd7228f2d',393,852),
+  aivid:  UP('1531746020798-e6953c6e8e04',393,852),
+  t2v:    UP('1472099645785-5658abf4ff4e',393,852),
+  none:   UP('1520813792240-56fc4a3765a7',393,852),
 };
 
 // ── EFFECT THUMB PHOTOS ──
@@ -1740,42 +1675,20 @@ const _homeData = {
   t2v:    { label:'Type it, see it happen',      name:'Text To Video',  cat:'AI Create',   gens:'218K Generations', cls:'hc-aivid'  },
   none:   { label:'Your style, your story',      name:'Tvorra AI',      cat:'AI Video',    gens:'2.1M Generations', cls:'hc-runway' },
 };
-const _homeBgTypes = [
-  ['pt-f1','pt-m1','pt-f3'],
-  ['pt-m2','pt-f2','pt-m4'],
-];
 let _liked = false;
 
-function buildHomeBg() {
-  const bg = document.getElementById('home-bg');
-  if (bg.childElementCount) return;
-  _homeBgTypes.flat().forEach((cls, i) => {
-    const d = document.createElement('div');
-    d.className = `photo-card ${cls}`;
-    const photo = POOL[(i + 6) % POOL.length];
-    d.innerHTML = `<div class="pc-img" style="background-image:url('${photo}')"></div><div class="photo-light"></div><div class="photo-fade"></div>`;
-    bg.appendChild(d);
-  });
-}
-
 function showHome() {
-  buildHomeBg();
   const key = _effect || 'kisses';
   const d = _homeData[key] || _homeData.kisses;
-  const card = document.getElementById('home-big-card');
-  const person = document.getElementById('home-person');
-  // reset classes
-  card.className = `home-big-card ${d.cls} has-photo`;
-  card.style.backgroundImage = `url('${HOME_PHOTOS[key] || HOME_PHOTOS.kisses}')`;
-  person.className = `home-person ${d.cls}`;
+  const photoBg = document.getElementById('home-photo-bg');
+  photoBg.style.backgroundImage = `url('${HOME_PHOTOS[key] || HOME_PHOTOS.kisses}')`;
   document.getElementById('home-card-label').textContent = d.label;
   document.getElementById('home-effect-name').textContent = d.name;
   document.getElementById('home-cat').textContent = d.cat;
   document.getElementById('home-hits').textContent = d.gens;
-  // reset like
   _liked = false;
   const ico = document.getElementById('home-like-ico');
-  if (ico) ico.style.fill = 'none';
+  if (ico) { ico.style.fill = 'none'; ico.style.stroke = '#fff'; }
 }
 
 function toggleLike() {
