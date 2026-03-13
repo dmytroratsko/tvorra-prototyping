@@ -133,6 +133,15 @@ html, body {
   position:relative; overflow:hidden;
   background:var(--scene, #1a1020);
 }
+/* Real photo layer */
+.pc-img {
+  position:absolute; inset:0; z-index:1;
+  background-size:cover; background-position:top center;
+  border-radius:inherit;
+}
+.photo-card:has(.pc-img)::before,
+.photo-card:has(.pc-img)::after { opacity:0; }
+.photo-card:has(.pc-img) .photo-hair { opacity:0; }
 /* Person body */
 .photo-card::before {
   content:'';
@@ -471,8 +480,17 @@ html, body {
 .ps-scene {
   position:absolute; inset:0;
   background:var(--sc, #0d0d1e);
+  background-size:cover; background-position:top center;
   overflow:hidden;
 }
+.ps-scene.has-photo .ps-figure,
+.ps-scene.has-photo .ps-head,
+.ps-scene.has-photo .ps-hair  { display:none; }
+/* Home big card with photo */
+.home-big-card.has-photo {
+  background-size:cover; background-position:top center;
+}
+.home-big-card.has-photo .home-person { display:none; }
 
 /* Larger central figure for preview */
 .ps-figure {
@@ -744,7 +762,7 @@ html, body {
 }
 
 /* ─ Plans ─ */
-.pw-plans { padding:0 20px; display:flex; flex-direction:column; gap:10px; margin-bottom:24px; margin-top:20px; }
+.pw-plans { padding:0 20px; display:flex; flex-direction:column; gap:10px; margin-bottom:24px; margin-top:8px; }
 
 /* ─ Sticky CTA ─ */
 .pw-sticky-cta {
@@ -1521,7 +1539,7 @@ function showPreviews() {
     const sl = document.createElement('div');
     sl.className = 'preview-slide';
     sl.innerHTML = `
-      <div class="ps-scene" style="background:${d.sc}">
+      <div class="ps-scene has-photo" style="background:${d.sc}; background-image:url('${(PV_PHOTOS[_effect]||PV_PHOTOS.kisses)[i]}')">
         <div class="ps-glow" style="--gc:${d.gc}"></div>
         <div class="ps-streak" style="--str:${d.str}"></div>
         <div class="ps-figure" style="--body:${d.body}"></div>
@@ -1602,7 +1620,8 @@ function buildMosaic() {
     const cell = document.createElement('div');
     cell.className = `mosaic-cell photo-card ${cls}`;
     cell.style.cssText = `--d:${2.4+Math.random()*1.6}s;--dl:${i*0.11}s`;
-    cell.innerHTML = '<div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div>';
+    const photo = POOL[i % POOL.length];
+    cell.innerHTML = `<div class="pc-img" style="background-image:url('${photo}')"></div><div class="photo-light"></div><div class="photo-fade"></div>`;
     m.appendChild(cell);
   });
 }
@@ -1612,10 +1631,11 @@ const PW_COL = ['pt-f1','pt-m2','pt-f4'];
 function buildPwCollage() {
   const c = document.getElementById('pw-collage');
   if (!c) return;
-  PW_COL.forEach(cls => {
+  PW_COL.forEach((cls, i) => {
     const cell = document.createElement('div');
     cell.className = `pw-col-cell photo-card ${cls}`;
-    cell.innerHTML = '<div class="photo-hair"></div><div class="photo-light"></div>';
+    const photo = POOL[(i + 3) % POOL.length];
+    cell.innerHTML = `<div class="pc-img" style="background-image:url('${photo}')"></div><div class="photo-light"></div>`;
     c.appendChild(cell);
   });
 }
@@ -1641,13 +1661,47 @@ function scalePhone() {
 scalePhone();
 window.addEventListener('resize', scalePhone);
 
+// ── PHOTOS ──
+const UP = (id,w,h) => `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format&q=75`;
+// Portrait pool (women / men / fashion)
+const POOL = [
+  UP('1529626455594-4ff0802cfb7e',300,600), // f1 elegant woman dark bg
+  UP('1488426862026-3ee34a7d66df',300,600), // f2 woman portrait
+  UP('1524504388940-b1c1722653e1',300,600), // f3 fashion outdoor
+  UP('1534528741775-53994a69daeb',300,600), // f4 woman earrings
+  UP('1517841905240-472988babdf9',300,600), // f5 woman brown hair
+  UP('1531746020798-e6953c6e8e04',300,600), // f6 woman profile
+  UP('1507003211169-0a1dd7228f2d',300,600), // m1 man casual
+  UP('1500648767791-00dcc994a43e',300,600), // m2 man glasses
+  UP('1472099645785-5658abf4ff4e',300,600), // m3 man dark
+  UP('1506794778202-cad84cf45f1d',300,600), // m4 man casual 2
+  UP('1554151228-14d9def656e4',300,600),    // f7 woman headshot
+  UP('1520813792240-56fc4a3765a7',300,600), // f8 woman fashion
+];
+// Preview slide photos [kisses, runway, glam, tiktok, aivid] × 3 slides
+const PV_PHOTOS = {
+  kisses: [UP('1529626455594-4ff0802cfb7e',393,700), UP('1488426862026-3ee34a7d66df',393,700), UP('1554151228-14d9def656e4',393,700)],
+  runway: [UP('1524504388940-b1c1722653e1',393,700), UP('1520813792240-56fc4a3765a7',393,700), UP('1531746020798-e6953c6e8e04',393,700)],
+  glam:   [UP('1517841905240-472988babdf9',393,700), UP('1534528741775-53994a69daeb',393,700), UP('1488426862026-3ee34a7d66df',393,700)],
+  tiktok: [UP('1507003211169-0a1dd7228f2d',393,700), UP('1472099645785-5658abf4ff4e',393,700), UP('1506794778202-cad84cf45f1d',393,700)],
+  aivid:  [UP('1531746020798-e6953c6e8e04',393,700), UP('1524504388940-b1c1722653e1',393,700), UP('1529626455594-4ff0802cfb7e',393,700)],
+};
+// Home big card photo per effect
+const HOME_PHOTOS = {
+  kisses: UP('1529626455594-4ff0802cfb7e',400,600),
+  runway: UP('1524504388940-b1c1722653e1',400,600),
+  glam:   UP('1534528741775-53994a69daeb',400,600),
+  tiktok: UP('1507003211169-0a1dd7228f2d',400,600),
+  aivid:  UP('1531746020798-e6953c6e8e04',400,600),
+};
+
 // ── HOME SCREEN ──
 const _homeData = {
-  kisses: { label:'Make it romantic',       name:'AI Kisses',       cat:'AI Video',   hits:'553K Hits', cls:'hc-kisses' },
-  runway: { label:'Walk the virtual runway', name:'Runway Effect',   cat:'AI Fashion', hits:'721K Hits', cls:'hc-runway' },
-  glam:   { label:'Transform your look',    name:'Glam Makeover',   cat:'AI Beauty',  hits:'1.2M Hits', cls:'hc-glam'   },
-  tiktok: { label:'Go viral on TikTok',     name:'TikTok Trends',   cat:'AI Viral',   hits:'890K Hits', cls:'hc-tiktok' },
-  aivid:  { label:'Bring your photos to life', name:'AI Videos',    cat:'AI Create',  hits:'340K Hits', cls:'hc-aivid'  },
+  kisses: { label:'Make it romantic',          name:'AI Kisses',      cat:'AI Video',   gens:'553K Generations', cls:'hc-kisses' },
+  runway: { label:'Walk the virtual runway',   name:'Runway Effect',  cat:'AI Fashion', gens:'721K Generations', cls:'hc-runway' },
+  glam:   { label:'Transform your look',       name:'Glam Makeover',  cat:'AI Beauty',  gens:'1.2M Generations', cls:'hc-glam'   },
+  tiktok: { label:'Go viral on TikTok',        name:'TikTok Trends',  cat:'AI Viral',   gens:'890K Generations', cls:'hc-tiktok' },
+  aivid:  { label:'Bring your photos to life', name:'AI Videos',      cat:'AI Create',  gens:'340K Generations', cls:'hc-aivid'  },
 };
 const _homeBgTypes = [
   ['pt-f1','pt-m1','pt-f3'],
@@ -1658,10 +1712,11 @@ let _liked = false;
 function buildHomeBg() {
   const bg = document.getElementById('home-bg');
   if (bg.childElementCount) return;
-  _homeBgTypes.flat().forEach(cls => {
+  _homeBgTypes.flat().forEach((cls, i) => {
     const d = document.createElement('div');
     d.className = `photo-card ${cls}`;
-    d.innerHTML = '<div class="photo-hair"></div><div class="photo-light"></div><div class="photo-fade"></div>';
+    const photo = POOL[(i + 6) % POOL.length];
+    d.innerHTML = `<div class="pc-img" style="background-image:url('${photo}')"></div><div class="photo-light"></div><div class="photo-fade"></div>`;
     bg.appendChild(d);
   });
 }
@@ -1673,12 +1728,13 @@ function showHome() {
   const card = document.getElementById('home-big-card');
   const person = document.getElementById('home-person');
   // reset classes
-  card.className = `home-big-card ${d.cls}`;
+  card.className = `home-big-card ${d.cls} has-photo`;
+  card.style.backgroundImage = `url('${HOME_PHOTOS[key] || HOME_PHOTOS.kisses}')`;
   person.className = `home-person ${d.cls}`;
   document.getElementById('home-card-label').textContent = d.label;
   document.getElementById('home-effect-name').textContent = d.name;
   document.getElementById('home-cat').textContent = d.cat;
-  document.getElementById('home-hits').textContent = d.hits;
+  document.getElementById('home-hits').textContent = d.gens;
   // reset like
   _liked = false;
   const ico = document.getElementById('home-like-ico');
