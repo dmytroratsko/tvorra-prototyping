@@ -6,7 +6,7 @@ Clickable HTML/CSS/JS prototypes for the Tvorra iOS app. Each screen flow is a s
 
 | Folder | Description | Live |
 |--------|-------------|------|
-| `onboarding/` | Full onboarding flow (splash → gender → effect → preview → paywall → success) | [Open](https://dmytroratsko.github.io/tvorra-prototyping/onboarding/) |
+| `onboarding/` | Full onboarding flow (splash → gender → effect → preview → paywall → home) | [Open](https://dmytroratsko.github.io/tvorra-prototyping/onboarding/) |
 
 ---
 
@@ -21,7 +21,7 @@ Clickable HTML/CSS/JS prototypes for the Tvorra iOS app. Each screen flow is a s
 
 ## Onboarding Prototype
 
-Single file (`onboarding/index.html`, ~1544 lines), no dependencies, no build step.
+Single file (`onboarding/index.html`, ~1800 lines), no dependencies, no build step.
 
 **Live:** https://dmytroratsko.github.io/tvorra-prototyping/onboarding/
 
@@ -30,18 +30,18 @@ Single file (`onboarding/index.html`, ~1544 lines), no dependencies, no build st
 ## Screens & Flow
 
 ```
-s-splash → s-gender → s-effect → s-preview → s-loading → s-paywall → s-success
+s-splash → s-gender → s-effect → s-preview → s-loading → s-paywall → s-home
 ```
 
 | Screen ID | Description |
 |-----------|-------------|
-| `s-splash` | Intro screen — collage bg, stars badge, "1M+ Videos Created", CTA |
-| `s-gender` | Gender select — CSS photo-card icons (female / male / other) |
-| `s-effect` | AI effect type select — Kisses / Runway / Glam / Viral |
-| `s-preview` | 3-slide preview carousel per effect — fullscreen photo scene + decos |
-| `s-loading` | "Preparing..." loader — 4 animated checklist steps before paywall |
-| `s-paywall` | Subscription screen — collage, plans, benefits, sticky CTA |
-| `s-success` | Success confirmation — star orb animation |
+| `s-splash` | Intro screen — animated photo mosaic bg, stars badge, "1M+ Videos Created", CTA |
+| `s-gender` | Gender select — CSS photo-card icons (female / male / other), auto-advances on tap |
+| `s-effect` | Effect type select — 7 rows with real photo thumbnails + sticky CTA |
+| `s-preview` | 3-slide carousel per effect — fullscreen Unsplash photo + CSS deco shapes |
+| `s-loading` | "Preparing..." — 4-step animated checklist before paywall |
+| `s-paywall` | Subscription screen — 3-photo collage with smooth fade, plans, benefits, sticky CTA |
+| `s-home` | Personalised feed card — blurred bg, effect photo, metadata, "Try Now" |
 
 ---
 
@@ -71,51 +71,73 @@ Types: `.deco-spark` (4-point star), `.deco-heart`, `.deco-circle`, `.deco-diamo
 Color passed via `--dc` CSS custom property.
 
 ### Photo cards (`.photo-card`)
-Full-scene person placeholders — `::before` body + `::after` head + `.photo-hair`.
-Used in paywall collage and preview slides.
+CSS-generated person placeholders — `::before` body + `::after` head + `.photo-hair`.
+When a `.pc-img` child is present, CSS silhouette auto-hides via `:has(.pc-img)` selector.
+
+### Real photo layer (`.pc-img`)
+Unsplash CDN image injected inside `.photo-card`:
+```css
+.pc-img {
+  position:absolute; inset:0; z-index:1;
+  background-size:cover; background-position:top center;
+  border-radius:inherit;
+}
+.photo-card:has(.pc-img)::before,
+.photo-card:has(.pc-img)::after { opacity:0; }
+.photo-card:has(.pc-img) .photo-hair { opacity:0; }
+```
 
 ---
 
 ## Screen Details
 
 ### s-splash
-- Background: `#080810` full viewport
-- Badge: `⭐⭐⭐⭐⭐` + laurel SVG branches + "1M+ Videos Created" (2 lines, bold)
-- Title: large white + accent gradient text
-- CTA: gradient pill button → navigates to `s-gender`
+- Animated photo mosaic grid (rotated, drifting) with real Unsplash photos via `buildMosaic()`
+- Overlay gradient fades mosaic into dark bottom
+- Badge: `⭐⭐⭐⭐⭐` + laurel SVG branches + "1M+ Videos Created"
+- Title: "Welcome to Tvorra 🔥", subtitle, gradient CTA button → `s-gender`
 
 ### s-gender
-- 3 list rows with CSS photo icons + label + chevron
-- Tap selects row, 200ms delay → auto-advances to `s-effect`
+- 3 list rows: Female / Male / Other with CSS photo icons + chevron
+- Tap → highlights row, 200ms delay → auto-advances to `s-effect`
 
 ### s-effect
-- 4 effect cards in 2×2 grid
-- Each card: photo-card bg + label
-- Effects: Kisses / Runway / Glam / Viral
-- Tap → sets `_effect` global → navigates to `s-preview`
+- 7 scrollable rows: AI Kisses / Viral Dances / Hugs Nostalgia / TikTok Trends / AI Videos / Text To Video / None of These
+- Each row: real Unsplash photo thumbnail (56×66px) via `buildEffectThumbs()` + tag + name + desc + chevron
+- Effect keys: `kisses`, `dances`, `hugs`, `tiktok`, `aivid`, `t2v`, `none`
+- Tap → sets `_effect` global → enables "See Your Content" sticky CTA
+- CTA button calls `showPreviews()` → builds slides → navigates to `s-preview`
 
 ### s-preview
-- `showPreviews()` renders 3 slides per effect
-- Each slide: fullscreen photo scene + CSS deco shapes + title + description
-- Sticky "Next" / "Skip" button at bottom
-- Skip → `s-loading`, last slide Next → `s-loading`
+- `showPreviews()` builds 3 slides per `_effect` from `PV[]` data + `PV_PHOTOS[]` images
+- Each slide: fullscreen Unsplash photo scene + glow + CSS deco shapes + overlay + title/desc
+- Slides swipe via `preview-track` translateX
+- "Next" → next slide; last slide → `s-loading`
 
 ### s-loading
 - `startLoading()` called on nav to this screen
-- 4 steps animate: pending → active (spinner) → done (checkmark)
-- Step timing: ~900–1300ms each
+- 4 steps animate: pending → active (spinning border) → done (white checkmark)
+- Step timing: ~800–1100ms each
 - After all done → auto-navigates to `s-paywall`
 
 ### s-paywall
-- Structure: `flex-column` — close btn + `pw-scroll` + `pw-sticky-cta`
-- `pw-scroll`: collage (photo cards) + offer + plans (yearly/weekly) + benefits + social proof + guarantee
-- `pw-sticky-cta`: single "Continue" button pinned at bottom with gradient fade above
-- Countdown timer: 8 min, ticks every second
-- Plans toggle: yearly (selected by default) / weekly
+- Structure: `flex-column` — `pw-x` close btn + `pw-scroll` + `pw-sticky-cta`
+- `pw-scroll`: 3-photo collage (370px, smooth 260px gradient fade) + title + countdown timer + plans + benefits + featured card + social proof mosaic + reviews + guarantee
+- Collage built by `buildPwCollage()` with real Unsplash photos
+- Social proof mosaic built by `buildPwMosaic()` with real Unsplash photos
+- Countdown timer: 9:59, ticks every second, loops
+- Plans toggle: yearly (selected by default, "Save 92%") / weekly
+- `pw-x` close → `s-home`; Continue → `s-home`
 
-### s-success
-- SVG star orb with glow animation
-- "You're all set!" title
+### s-home
+- Blurred photo-grid background (`home-bg`) via `buildHomeBg()`
+- Dark overlay with `backdrop-filter:blur(14px)`
+- Floating sheet card (`home-sheet`) with:
+  - X button (→ `s-splash`) + heart like toggle
+  - Big photo card with real Unsplash photo per effect + label overlay
+  - Effect name, category, generations count
+  - "Try Now" white CTA (→ `s-splash`)
+- Content personalised to `_effect` via `_homeData[]` and `HOME_PHOTOS[]`
 
 ---
 
@@ -123,35 +145,55 @@ Used in paywall collage and preview slides.
 
 ```js
 nav('screen-id')   // navigate forward
-goBack()           // navigate back
+goBack()           // navigate back (uses _hist stack)
 ```
 
 Transitions: CSS `opacity` + `translateX`, classes `.active` / `.exit`.
+
+Special hooks in `nav()`:
+- `s-loading` → calls `startLoading()`
+- `s-paywall` → calls `startTimer()`
+- `s-home` → calls `showHome()`
+
+---
+
+## Photo System
+
+```js
+const UP = (id, w, h) =>
+  `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format&q=75`;
+```
+
+| Object | Purpose | Size |
+|--------|---------|------|
+| `POOL[12]` | Splash mosaic + paywall collage/mosaic + home bg | 300×600 |
+| `PV_PHOTOS` | Preview slide fullscreen photos per effect | 393×700 |
+| `HOME_PHOTOS` | Home screen big card photo per effect | 400×600 |
+| `EFF_PHOTOS` | Effect picker row thumbnails per effect | 112×132 |
+
+Effects covered in all photo objects: `kisses`, `dances`, `hugs`, `tiktok`, `aivid`, `t2v`, `none`
 
 ---
 
 ## Preview Slide Data
 
-Each effect has 3 slides defined in `pvData` object:
+Each effect has 3 slides in `PV` object:
 ```js
-pvData = {
-  kisses: { slides: [...], persons: [...] },
-  runway: { ... },
-  glam:   { ... },
-  viral:  { ... }
+PV = {
+  kisses: [ { sc, body, head, hair, gc, str, badge, title, desc, decos:[] }, ... ],
+  dances: [ ... ],
+  hugs:   [ ... ],
+  tiktok: [ ... ],
+  aivid:  [ ... ],
+  t2v:    [ ... ],
+  none:   [ ... ],
 }
 ```
 
-Each slide:
+Each deco:
 ```js
-{
-  title: 'Slide Title',
-  desc: 'Description text',
-  decos: [
-    { t:'deco-heart', c:'rgba(255,80,120,0.75)', x:'10%', y:'12%',
-      fs:'26px', op:.5, d:'3s', dl:'0s' },
-  ]
-}
+{ t:'deco-heart', c:'rgba(255,80,120,0.75)', x:'10%', y:'12%',
+  fs:'26px', op:.5, d:'3s', dl:'0s' }
 ```
 
 ---
@@ -164,12 +206,12 @@ Edit the file locally, then from Terminal:
 cd /Users/d.ratsko/Downloads/tvorra-onboarding
 git add onboarding/index.html
 git commit -m "describe change"
-git push
+GIT_SSH_COMMAND="ssh -i ~/.ssh/github_key -o StrictHostKeyChecking=no" git push origin main
 ```
 
 Site updates at https://dmytroratsko.github.io/tvorra-prototyping/ within ~1 min.
 
-SSH key `tvorra-prototype` is configured at `~/.ssh/github_key`
+SSH key is configured at `~/.ssh/github_key` (ed25519).
 
 ---
 
@@ -185,3 +227,13 @@ SSH key `tvorra-prototype` is configured at `~/.ssh/github_key`
 | Body background | `#111` → `#080810` (deep dark blue-purple) |
 | Paywall 3 buttons → 1 sticky | All `pw-cta` inside scroll removed; single `pw-sticky-cta` outside scroll |
 | Loading screen added | `s-loading` with animated checklist before paywall |
+| Progress bar + skip removed | Removed all skip buttons and progress bar from preview |
+| s-home screen added | Personalised feed card after paywall close/continue |
+| Real photos added | `POOL`, `PV_PHOTOS`, `HOME_PHOTOS` via Unsplash CDN + `.pc-img` system |
+| Flow updated | `s-success` removed from flow; paywall now → `s-home` |
+| Effect picker redesigned | 4 cards → 7 scrollable rows with photo thumbnails |
+| Effect thumb real photos | `buildEffectThumbs()` injects `.pc-img` into each `.eff-thumb` |
+| Paywall collage fade | Gradient 150px → 260px multi-stop for smooth photo-to-content transition |
+| PV_PHOTOS data gap | Added `dances/hugs/t2v/none` keys (were falling back to `kisses`) |
+| _homeData / HOME_PHOTOS gap | Added `dances/hugs/t2v/none` entries |
+| pw-mosaic real photos | `buildPwMosaic()` now uses real Unsplash photos |
