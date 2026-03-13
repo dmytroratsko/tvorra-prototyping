@@ -41,7 +41,7 @@ s-splash → s-gender → s-effect → s-preview → s-loading → s-paywall →
 | `s-preview` | 3-slide carousel per effect — fullscreen Unsplash photo + CSS deco shapes |
 | `s-loading` | "Preparing..." — 4-step animated checklist before paywall |
 | `s-paywall` | Subscription screen — 3-photo collage with smooth fade, plans, benefits, sticky CTA |
-| `s-home` | Personalised feed card — blurred bg, effect photo, metadata, "Try Now" |
+| `s-home` | Full-screen photo + bottom-sheet — Unsplash photo fills screen, gradient fade, drag handle, effect name/meta, "Try Now" |
 
 ---
 
@@ -130,12 +130,12 @@ Unsplash CDN image injected inside `.photo-card`:
 - `pw-x` close → `s-home`; Continue → `s-home`
 
 ### s-home
-- Blurred photo-grid background (`home-bg`) via `buildHomeBg()`
-- Dark overlay with `backdrop-filter:blur(14px)`
-- Floating sheet card (`home-sheet`) with:
-  - X button (→ `s-splash`) + heart like toggle
-  - Big photo card with real Unsplash photo per effect + label overlay
-  - Effect name, category, generations count
+- Full-screen Unsplash photo (`393×852px`) as background via `home-photo-bg`
+- Multi-stop gradient fade: `transparent → rgba(8,8,15,0.62) @ 60% → var(--bg) @ 78%` — photo bleeds into dark seamlessly
+- Top controls: X (→ `s-splash`) + heart like toggle, both frosted-glass circles
+- Bottom-sheet content (no container card):
+  - Drag handle pill
+  - Effect label (small subtitle), effect name (30px/800 title), category · generations
   - "Try Now" white CTA (→ `s-splash`)
 - Content personalised to `_effect` via `_homeData[]` and `HOME_PHOTOS[]`
 
@@ -166,9 +166,9 @@ const UP = (id, w, h) =>
 
 | Object | Purpose | Size |
 |--------|---------|------|
-| `POOL[12]` | Splash mosaic + paywall collage/mosaic + home bg | 300×600 |
+| `POOL[12]` | Splash mosaic + paywall collage/mosaic | 300×600 |
 | `PV_PHOTOS` | Preview slide fullscreen photos per effect | 393×700 |
-| `HOME_PHOTOS` | Home screen big card photo per effect | 400×600 |
+| `HOME_PHOTOS` | Home full-screen photo per effect | 393×852 |
 | `EFF_PHOTOS` | Effect picker row thumbnails per effect | 112×132 |
 
 Effects covered in all photo objects: `kisses`, `dances`, `hugs`, `tiktok`, `aivid`, `t2v`, `none`
@@ -237,3 +237,5 @@ SSH key is configured at `~/.ssh/github_key` (ed25519).
 | PV_PHOTOS data gap | Added `dances/hugs/t2v/none` keys (were falling back to `kisses`) |
 | _homeData / HOME_PHOTOS gap | Added `dances/hugs/t2v/none` entries |
 | pw-mosaic real photos | `buildPwMosaic()` now uses real Unsplash photos |
+| s-home full redesign | Removed card container + blurred grid bg. Now full-screen photo with multi-stop gradient fade + bottom-sheet style content (drag handle, label, title, meta, CTA) |
+| HOME_PHOTOS size | Updated to `393×852` (full phone bleed) from `400×600` |
