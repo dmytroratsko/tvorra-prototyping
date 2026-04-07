@@ -527,21 +527,17 @@
     /* ── Mute button (bottom-left, above CTA) ── */
     .preview-mute {
       position: absolute;
-      bottom: 116px;
+      bottom: 124px;
       left: 20px;
       z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
       cursor: pointer;
       background: none;
       border: none;
       transition: transform 0.12s;
     }
-    .preview-mute:active { transform: scale(0.90); }
+    .preview-mute:active { transform: scale(0.88); }
     .mute-icon-wrap {
-      width: 48px; height: 48px;
+      width: 30px; height: 30px;
       border-radius: 50%;
       background: rgba(0,0,0,0.42);
       backdrop-filter: blur(10px);
@@ -549,12 +545,12 @@
       display: flex; align-items: center; justify-content: center;
     }
     .mute-icon-wrap svg {
-      width: 22px; height: 22px;
+      width: 13px; height: 13px;
       stroke: #fff; fill: none;
-      stroke-width: 1.9;
+      stroke-width: 2;
       stroke-linecap: round; stroke-linejoin: round;
     }
-    .mute-label { font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,0.75); }
+    .mute-label { display: none; }
 
     /* Bottom CTA */
     .preview-bottom {
