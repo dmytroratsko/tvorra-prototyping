@@ -7,6 +7,7 @@ Clickable HTML/CSS/JS prototypes for the Tvorra iOS app. Each screen flow is a s
 | Folder | Description | Live |
 |--------|-------------|------|
 | `onboarding/` | Full onboarding flow (splash → gender → effect → preview → paywall → home) | [Open](https://dmytroratsko.github.io/tvorra-prototyping/onboarding/) |
+| `main-screen/` | Main screen redesign — Feed + Full Screen Preview template | [Open](https://dmytroratsko.github.io/tvorra-prototyping/main-screen/) |
 
 ---
 
