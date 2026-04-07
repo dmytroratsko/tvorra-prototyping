@@ -11,6 +11,61 @@ Clickable HTML/CSS/JS prototypes for the Tvorra iOS app. Each screen flow is a s
 
 ---
 
+## Main Screen Prototype
+
+Single file (`main-screen/index.html`), no dependencies, no build step.
+
+**Live:** https://dmytroratsko.github.io/tvorra-prototyping/main-screen/
+
+---
+
+### Screens & Flow
+
+```
+s-feed ──(tap card)──▶ s-preview ──(back)──▶ s-feed
+```
+
+| Screen | Description |
+|--------|-------------|
+| `s-feed` | Main feed — promoted features, tags, template categories with horizontal scroll, sticky Pro badge, tab bar |
+| `s-preview` | Full screen template preview — title at top with fade, right sidebar (like/share/save), mute toggle, "Use Template" CTA |
+
+---
+
+### Feed Layout
+
+- **Promoted Features** — horizontal scroll of 5 square cards (AI Kisses, AI Hugs, AI Outfit, AI Reels, AI Dances) with ken-burns photo animation and play icon
+- **Tags** — horizontal scroll chips with emoji icons (All Effects, Viral, Romance, Animals, Fashion, Dances, Horror, Nature)
+- **Template Categories** — 3 sections (Trends, Viral Videos, Romance), each with 5 cards in a horizontal scroll; viewport shows 2.5 cards to hint at scrolling
+- **Template Cards** — show template name, ⚡ generation count, and music note icon if audio template
+- **Pro Badge** — Videoleap-style sticky bar above tab bar: × dismiss · 👑 icon · "Unlock Tvorra Pro" · "Try Free" pill button
+- **Tab Bar** — Explore / AI Studio / Profile
+
+---
+
+### Full Screen Preview Layout
+
+- Full-screen photo background
+- **Top fade** — dark gradient so title text is always readable
+- **Title** — centered at top, bold, with text-shadow
+- **Right sidebar** — vertical stack: Like (with count + toggle), Share, Save (with toggle)
+- **Mute button** — small 30px circle, bottom-left, above CTA
+- **CTA** — full-width "Use Template" gradient button at bottom
+
+---
+
+### Design Tokens
+
+```css
+--bg:      #08080f   /* deep dark background */
+--accent:  #C94BE0   /* purple primary */
+--accent2: #7040D8   /* purple secondary */
+```
+
+iPhone viewport: `393×852px`
+
+---
+
 ## Adding a new prototype
 
 1. Create a new folder: `mkdir new-screen-name`
