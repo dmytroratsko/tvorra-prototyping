@@ -7,20 +7,20 @@
   <style>
     /* ─── Design Tokens ─── */
     :root {
-      --bg:         #08080f;
-      --surface:    #13131e;
-      --surface2:   #1c1c2e;
-      --accent:     #C94BE0;
-      --accent2:    #7040D8;
-      --text:       #ffffff;
-      --text2:      rgba(255,255,255,0.55);
-      --text3:      rgba(255,255,255,0.30);
-      --border:     rgba(255,255,255,0.07);
-      --tab-h:      82px;
-      --pro-h:      58px;
-      --r-sm:       10px;
-      --r-md:       16px;
-      --r-lg:       22px;
+      --bg:      #08080f;
+      --surface: #13131e;
+      --surface2:#1c1c2e;
+      --accent:  #C94BE0;
+      --accent2: #7040D8;
+      --text:    #ffffff;
+      --text2:   rgba(255,255,255,0.55);
+      --text3:   rgba(255,255,255,0.30);
+      --border:  rgba(255,255,255,0.07);
+      --tab-h:   82px;
+      --pro-h:   54px;
+      --r-sm:    10px;
+      --r-md:    16px;
+      --r-lg:    22px;
     }
 
     *, *::before, *::after {
@@ -73,7 +73,7 @@
       inset: 0;
       overflow-y: auto;
       overflow-x: hidden;
-      padding-bottom: calc(var(--tab-h) + var(--pro-h) + 16px);
+      padding-bottom: calc(var(--tab-h) + var(--pro-h) + 20px);
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
@@ -87,11 +87,7 @@
       padding: 0 24px 10px;
       justify-content: space-between;
     }
-    .status-time {
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
-    }
+    .status-time { font-size: 15px; font-weight: 700; letter-spacing: -0.2px; }
     .status-icons { display: flex; gap: 5px; align-items: center; }
 
     /* Header */
@@ -101,11 +97,7 @@
       justify-content: space-between;
       padding: 2px 20px 18px;
     }
-    .feed-logo {
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.6px;
-    }
+    .feed-logo { font-size: 24px; font-weight: 800; letter-spacing: -0.6px; }
     .feed-coins {
       display: flex;
       align-items: center;
@@ -121,9 +113,7 @@
       width: 20px; height: 20px;
       background: linear-gradient(135deg, #FFD700, #FF8C00);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 11px;
     }
 
@@ -141,8 +131,7 @@
 
     .promoted-card {
       flex-shrink: 0;
-      width: 106px;
-      height: 106px;
+      width: 106px; height: 106px;
       border-radius: var(--r-md);
       overflow: hidden;
       position: relative;
@@ -150,8 +139,7 @@
       background: var(--surface2);
     }
     .promoted-card-bg {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background-size: cover;
       background-position: center;
       animation: ken-burns 9s ease-in-out infinite alternate;
@@ -161,40 +149,25 @@
       to   { transform: scale(1.10); }
     }
     .promoted-card-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom,
-        rgba(0,0,0,0.12) 0%,
-        rgba(0,0,0,0.62) 100%
-      );
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.65) 100%);
     }
     .promoted-card-play {
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: 8px; right: 8px;
       width: 20px; height: 20px;
       background: rgba(255,255,255,0.22);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       backdrop-filter: blur(6px);
     }
-    .promoted-card-play svg {
-      width: 8px; height: 8px;
-      fill: #fff;
-      margin-left: 1px;
-    }
+    .promoted-card-play svg { width: 8px; height: 8px; fill: #fff; margin-left: 1px; }
     .promoted-card-label {
       position: absolute;
-      bottom: 9px;
-      left: 0; right: 0;
+      bottom: 9px; left: 0; right: 0;
       text-align: center;
-      font-size: 11.5px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.1px;
-      line-height: 1;
+      font-size: 11.5px; font-weight: 700; color: #fff;
+      letter-spacing: -0.1px; line-height: 1;
     }
 
     /* ── Tags ── */
@@ -217,84 +190,79 @@
       border-radius: 100px;
       background: var(--surface);
       border: 1px solid var(--border);
-      font-size: 13.5px;
-      font-weight: 600;
+      font-size: 13.5px; font-weight: 600;
       color: var(--text2);
       cursor: pointer;
       white-space: nowrap;
       transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
     .tag.active {
-      background: rgba(201, 75, 224, 0.15);
+      background: rgba(201,75,224,0.15);
       border-color: var(--accent);
       color: var(--accent);
     }
     .tag-icon { font-size: 14px; line-height: 1; }
 
-    /* ── Section header ── */
-    .section-header {
+    /* ── Category sections ── */
+    .category-section { margin-bottom: 28px; }
+
+    .category-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 20px 14px;
     }
-    .section-title {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-    .section-see-all {
-      font-size: 14px;
-      font-weight: 600;
+    .category-title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .category-see-all {
+      font-size: 14px; font-weight: 600;
       color: var(--accent);
       cursor: pointer;
     }
 
-    /* ── Template cards grid ── */
-    .templates-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    /* Horizontal scroll row — left pad only so partial 3rd card bleeds */
+    .category-row {
+      display: flex;
       gap: 10px;
-      padding: 0 16px;
+      padding: 0 0 4px 20px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
+    .category-row::-webkit-scrollbar { display: none; }
 
+    /* ── Template card (horizontal row version) ──
+       Width 144px → 2 full + ~65px peek of 3rd card visible */
     .tpl-card {
+      flex-shrink: 0;
+      width: 144px;
+      aspect-ratio: 9/16;
       border-radius: var(--r-md);
       overflow: hidden;
       position: relative;
       cursor: pointer;
       background: var(--surface2);
-      aspect-ratio: 9/16;
       transition: transform 0.15s;
     }
     .tpl-card:active { transform: scale(0.97); }
 
     .tpl-card-bg {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background-size: cover;
       background-position: top center;
     }
     .tpl-card-gradient {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        transparent 40%,
-        rgba(8,8,15,0.88) 100%
-      );
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 42%, rgba(8,8,15,0.90) 100%);
     }
     .tpl-card-bottom {
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      padding: 10px 10px 11px;
+      padding: 9px 10px 11px;
     }
     .tpl-card-name {
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.2px;
-      line-height: 1.2;
+      font-size: 12.5px; font-weight: 700; color: #fff;
+      letter-spacing: -0.2px; line-height: 1.2;
       margin-bottom: 6px;
     }
     .tpl-card-meta {
@@ -305,25 +273,21 @@
     .tpl-card-gens {
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.5);
+      gap: 3px;
+      font-size: 10.5px; font-weight: 600;
+      color: rgba(255,255,255,0.48);
     }
-    .tpl-card-gens svg {
-      width: 10px; height: 10px;
-      fill: rgba(255,255,255,0.4);
-    }
+    .tpl-card-gens svg { width: 9px; height: 9px; fill: rgba(255,255,255,0.38); }
     .tpl-card-music {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 22px; height: 22px;
+      width: 20px; height: 20px;
       background: rgba(255,255,255,0.12);
       border-radius: 50%;
     }
     .tpl-card-music svg {
-      width: 11px; height: 11px;
+      width: 10px; height: 10px;
       stroke: rgba(255,255,255,0.7);
       fill: none;
       stroke-width: 1.8;
@@ -331,59 +295,80 @@
       stroke-linejoin: round;
     }
 
-    /* ── Pro badge (sticky above tab bar) ── */
+    /* ── Pro badge — Videoleap style ── */
     .pro-badge {
       position: absolute;
       bottom: var(--tab-h);
-      left: 16px;
-      right: 16px;
+      left: 12px; right: 12px;
       height: var(--pro-h);
-      background: linear-gradient(110deg, var(--accent2) 0%, var(--accent) 100%);
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.10);
       border-radius: var(--r-md);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      cursor: pointer;
-      z-index: 50;
-      box-shadow: 0 6px 28px rgba(201,75,224,0.4);
-    }
-    .pro-badge-left {
-      display: flex;
-      align-items: center;
       gap: 10px;
+      padding: 0 10px 0 12px;
+      z-index: 50;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.55);
+      /* subtle left accent stripe */
+      overflow: hidden;
     }
-    .pro-badge-crown {
-      font-size: 20px;
-      filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+    /* left accent bar */
+    .pro-badge::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--accent2), var(--accent));
+      border-radius: var(--r-md) 0 0 var(--r-md);
     }
-    .pro-badge-title {
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
-    }
-    .pro-badge-sub {
-      font-size: 11.5px;
-      color: rgba(255,255,255,0.72);
-      font-weight: 500;
-      margin-top: 1px;
-    }
-    .pro-badge-arrow {
-      width: 30px; height: 30px;
-      background: rgba(255,255,255,0.18);
-      border-radius: 50%;
+    .pro-badge-dismiss {
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 28px; height: 28px;
       flex-shrink: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text3);
+      border-radius: 50%;
+      transition: background 0.12s;
     }
-    .pro-badge-arrow svg {
+    .pro-badge-dismiss:hover { background: rgba(255,255,255,0.06); }
+    .pro-badge-dismiss svg {
       width: 14px; height: 14px;
-      stroke: #fff;
+      stroke: var(--text3);
       fill: none;
-      stroke-width: 2.5;
+      stroke-width: 2.2;
       stroke-linecap: round;
-      stroke-linejoin: round;
+    }
+    .pro-badge-icon { font-size: 18px; flex-shrink: 0; }
+    .pro-badge-body { flex: 1; min-width: 0; }
+    .pro-badge-title {
+      font-size: 14px; font-weight: 700;
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pro-badge-sub {
+      font-size: 11px;
+      color: var(--text2);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+    .pro-badge-cta {
+      flex-shrink: 0;
+      padding: 8px 14px;
+      background: linear-gradient(110deg, var(--accent2), var(--accent));
+      border: none;
+      border-radius: 100px;
+      font-size: 13px; font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      letter-spacing: -0.1px;
+      white-space: nowrap;
     }
 
     /* ── Tab bar ── */
@@ -408,12 +393,7 @@
       gap: 4px;
       cursor: pointer;
     }
-    .tab-icon {
-      width: 28px; height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    .tab-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
     .tab-icon svg {
       width: 23px; height: 23px;
       stroke: var(--text3);
@@ -423,12 +403,7 @@
       stroke-linejoin: round;
       transition: stroke 0.15s;
     }
-    .tab-label {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text3);
-      transition: color 0.15s;
-    }
+    .tab-label { font-size: 10px; font-weight: 600; color: var(--text3); transition: color 0.15s; }
     .tab-item.active .tab-icon svg { stroke: var(--accent); }
     .tab-item.active .tab-label    { color: var(--accent); }
 
@@ -439,33 +414,27 @@
     #s-preview { background: #000; }
 
     .preview-photo {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background-size: cover;
       background-position: top center;
     }
 
-    /* Top fade — title lives here */
     .preview-top-fade {
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 220px;
-      background: linear-gradient(
-        to bottom,
+      background: linear-gradient(to bottom,
         rgba(0,0,0,0.70) 0%,
-        rgba(0,0,0,0.30) 50%,
+        rgba(0,0,0,0.25) 55%,
         transparent 100%
       );
       z-index: 2;
     }
-
-    /* Bottom fade */
     .preview-bottom-fade {
       position: absolute;
       bottom: 0; left: 0; right: 0;
       height: 220px;
-      background: linear-gradient(
-        to top,
+      background: linear-gradient(to top,
         rgba(8,8,15,0.95) 0%,
         rgba(8,8,15,0.40) 60%,
         transparent 100%
@@ -473,7 +442,7 @@
       z-index: 2;
     }
 
-    /* Top area: back + centered title */
+    /* Top: back + centered title */
     .preview-top {
       position: absolute;
       top: 0; left: 0; right: 0;
@@ -492,22 +461,17 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       cursor: pointer;
     }
     .preview-back svg {
       width: 16px; height: 16px;
-      stroke: #fff;
-      fill: none;
+      stroke: #fff; fill: none;
       stroke-width: 2.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      stroke-linecap: round; stroke-linejoin: round;
     }
     .preview-title {
-      font-size: 21px;
-      font-weight: 800;
+      font-size: 21px; font-weight: 800;
       letter-spacing: -0.5px;
       color: #fff;
       text-align: center;
@@ -544,32 +508,53 @@
       background: rgba(0,0,0,0.42);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       transition: background 0.15s;
     }
-    .sidebar-icon-wrap.liked {
-      background: rgba(255,77,109,0.25);
-    }
+    .sidebar-icon-wrap.liked  { background: rgba(255,77,109,0.25); }
+    .sidebar-icon-wrap.saved  { background: rgba(201,75,224,0.25); }
     .sidebar-icon-wrap svg {
       width: 22px; height: 22px;
-      stroke: #fff;
-      fill: none;
+      stroke: #fff; fill: none;
       stroke-width: 1.9;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      stroke-linecap: round; stroke-linejoin: round;
       transition: stroke 0.15s, fill 0.15s;
     }
-    .sidebar-icon-wrap.liked svg {
-      stroke: #ff4d6d;
-      fill: #ff4d6d;
+    .sidebar-icon-wrap.liked svg { stroke: #ff4d6d; fill: #ff4d6d; }
+    .sidebar-icon-wrap.saved svg { stroke: var(--accent); fill: var(--accent); }
+    .sidebar-label { font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,0.75); }
+
+    /* ── Mute button (bottom-left, above CTA) ── */
+    .preview-mute {
+      position: absolute;
+      bottom: 116px;
+      left: 20px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      transition: transform 0.12s;
     }
-    .sidebar-label {
-      font-size: 11.5px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.75);
+    .preview-mute:active { transform: scale(0.90); }
+    .mute-icon-wrap {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.42);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
     }
+    .mute-icon-wrap svg {
+      width: 22px; height: 22px;
+      stroke: #fff; fill: none;
+      stroke-width: 1.9;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .mute-label { font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,0.75); }
 
     /* Bottom CTA */
     .preview-bottom {
@@ -584,18 +569,14 @@
       background: linear-gradient(110deg, var(--accent2), var(--accent));
       border: none;
       border-radius: var(--r-md);
-      font-size: 17px;
-      font-weight: 700;
+      font-size: 17px; font-weight: 700;
       color: #fff;
       cursor: pointer;
       letter-spacing: -0.2px;
       box-shadow: 0 6px 24px rgba(201,75,224,0.45);
       transition: opacity 0.15s, transform 0.12s;
     }
-    .preview-cta:active {
-      opacity: 0.88;
-      transform: scale(0.98);
-    }
+    .preview-cta:active { opacity: 0.88; transform: scale(0.98); }
   </style>
 </head>
 <body>
@@ -608,20 +589,17 @@
     <div class="status-bar">
       <span class="status-time">9:41</span>
       <div class="status-icons">
-        <!-- Signal bars -->
         <svg width="17" height="12" viewBox="0 0 17 12" fill="white">
-          <rect x="0"    y="7"   width="3" height="5"  rx="0.6"/>
+          <rect x="0"    y="7"   width="3" height="5"   rx="0.6"/>
           <rect x="4.5"  y="4.5" width="3" height="7.5" rx="0.6"/>
-          <rect x="9"    y="2"   width="3" height="10" rx="0.6"/>
-          <rect x="13.5" y="0"   width="3" height="12" rx="0.6"/>
+          <rect x="9"    y="2"   width="3" height="10"  rx="0.6"/>
+          <rect x="13.5" y="0"   width="3" height="12"  rx="0.6"/>
         </svg>
-        <!-- WiFi -->
         <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
           <path d="M8 10a1.5 1.5 0 1 1 0 3A1.5 1.5 0 0 1 8 10z" fill="white"/>
           <path d="M3.8 6.3C5.2 4.9 6.6 4.2 8 4.2s2.8.7 4.2 2.1" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
           <path d="M0.5 3C3 .6 5.4 0 8 0s5 .6 7.5 3" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
         </svg>
-        <!-- Battery -->
         <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
           <rect x="0.6" y="1" width="20.4" height="10" rx="2" stroke="white" stroke-width="1.2"/>
           <rect x="22" y="4" width="2" height="4" rx="1" fill="white" opacity="0.45"/>
@@ -645,28 +623,23 @@
     <!-- Tags -->
     <div class="tags-scroll" id="tags-scroll"></div>
 
-    <!-- Templates -->
-    <div class="section-header">
-      <span class="section-title">Templates</span>
-      <span class="section-see-all">See all</span>
-    </div>
-    <div class="templates-grid" id="templates-grid"></div>
+    <!-- Category sections -->
+    <div id="categories-container"></div>
 
     <div style="height:12px"></div>
   </div>
 
-  <!-- Pro badge (above tab bar) -->
-  <div class="pro-badge">
-    <div class="pro-badge-left">
-      <span class="pro-badge-crown">👑</span>
-      <div>
-        <div class="pro-badge-title">Unlock Tvorra Pro</div>
-        <div class="pro-badge-sub">Unlimited generations &amp; effects</div>
-      </div>
+  <!-- Pro badge — Videoleap style -->
+  <div class="pro-badge" id="pro-badge">
+    <button class="pro-badge-dismiss" onclick="document.getElementById('pro-badge').style.display='none'">
+      <svg viewBox="0 0 14 14"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+    </button>
+    <span class="pro-badge-icon">👑</span>
+    <div class="pro-badge-body">
+      <div class="pro-badge-title">Unlock Tvorra Pro</div>
+      <div class="pro-badge-sub">7 days free · then $9.99/week</div>
     </div>
-    <div class="pro-badge-arrow">
-      <svg viewBox="0 0 14 14"><polyline points="5,2 10,7 5,12"/></svg>
-    </div>
+    <button class="pro-badge-cta">Try Free</button>
   </div>
 
   <!-- Tab bar -->
@@ -709,7 +682,7 @@
 
   <!-- Right sidebar: Like / Share / Save -->
   <div class="preview-sidebar">
-    <button class="sidebar-btn" onclick="toggleLike(this)">
+    <button class="sidebar-btn" onclick="toggleLike()">
       <div class="sidebar-icon-wrap" id="like-wrap">
         <svg viewBox="0 0 24 24">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06
@@ -733,8 +706,8 @@
       <span class="sidebar-label">Share</span>
     </button>
 
-    <button class="sidebar-btn">
-      <div class="sidebar-icon-wrap">
+    <button class="sidebar-btn" onclick="toggleSave(this)">
+      <div class="sidebar-icon-wrap" id="save-wrap">
         <svg viewBox="0 0 24 24">
           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
         </svg>
@@ -742,6 +715,19 @@
       <span class="sidebar-label">Save</span>
     </button>
   </div>
+
+  <!-- Mute button (bottom-left, above CTA) -->
+  <button class="preview-mute" id="mute-btn" onclick="toggleMute()">
+    <div class="mute-icon-wrap" id="mute-wrap">
+      <!-- Speaker with sound waves (unmuted) -->
+      <svg id="mute-ico" viewBox="0 0 24 24">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      </svg>
+    </div>
+    <span class="mute-label" id="mute-label">Sound</span>
+  </button>
 
   <!-- CTA button -->
   <div class="preview-bottom">
@@ -753,15 +739,15 @@
 <script>
   // ─── Data ───
   const PROMOTED = [
-    { name: 'AI Kisses',  img: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=220&h=220&fit=crop&q=80' },
-    { name: 'AI Hugs',    img: 'https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=220&h=220&fit=crop&q=80' },
-    { name: 'AI Outfit',  img: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=220&h=220&fit=crop&q=80' },
-    { name: 'AI Reels',   img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=220&h=220&fit=crop&q=80' },
-    { name: 'AI Dances',  img: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?w=220&h=220&fit=crop&q=80' },
+    { name: 'AI Kisses', img: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=220&h=220&fit=crop&q=80' },
+    { name: 'AI Hugs',   img: 'https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=220&h=220&fit=crop&q=80' },
+    { name: 'AI Outfit', img: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=220&h=220&fit=crop&q=80' },
+    { name: 'AI Reels',  img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=220&h=220&fit=crop&q=80' },
+    { name: 'AI Dances', img: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?w=220&h=220&fit=crop&q=80' },
   ];
 
   const TAGS = [
-    { label: 'All Effects', icon: '✦',  active: true },
+    { label: 'All Effects', icon: '✦', active: true },
     { label: 'Viral',       icon: '🔥' },
     { label: 'Romance',     icon: '💝' },
     { label: 'Animals',     icon: '🐾' },
@@ -771,39 +757,32 @@
     { label: 'Nature',      icon: '🌿' },
   ];
 
-  const TEMPLATES = [
-    {
-      name: 'AI Kisses', gens: '553K', hasMusic: true, likes: '24.5K',
-      img: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=711&fit=crop&q=80'
-    },
-    {
-      name: 'Ghibli Style', gens: '218K', hasMusic: false, likes: '18.2K',
-      img: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&h=711&fit=crop&q=80'
-    },
-    {
-      name: 'Viral Dances', gens: '445K', hasMusic: true, likes: '41.1K',
-      img: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?w=400&h=711&fit=crop&q=80'
-    },
-    {
-      name: 'AI Hugs', gens: '312K', hasMusic: false, likes: '29.8K',
-      img: 'https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=400&h=711&fit=crop&q=80'
-    },
-    {
-      name: 'Fashion AI', gens: '178K', hasMusic: true, likes: '15.6K',
-      img: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=400&h=711&fit=crop&q=80'
-    },
-    {
-      name: 'AI Outfit', gens: '290K', hasMusic: false, likes: '22.3K',
-      img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=711&fit=crop&q=80'
-    },
-    {
-      name: 'Anime Style', gens: '387K', hasMusic: true, likes: '35.7K',
-      img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=711&fit=crop&q=80'
-    },
-    {
-      name: 'Old Photo', gens: '142K', hasMusic: false, likes: '11.9K',
-      img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=711&fit=crop&q=80'
-    },
+  // All templates — referenced by categories
+  const ALL_TEMPLATES = [
+    // Trends (0–4)
+    { name: 'Ghibli Style',   gens: '218K', hasMusic: false, likes: '18.2K', img: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=320&h=568&fit=crop&q=80' },
+    { name: 'AI Reels',       gens: '387K', hasMusic: true,  likes: '35.7K', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=320&h=568&fit=crop&q=80' },
+    { name: 'Cartoon Me',     gens: '156K', hasMusic: false, likes: '14.1K', img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=320&h=568&fit=crop&q=80' },
+    { name: 'Neon Glow',      gens: '203K', hasMusic: true,  likes: '19.8K', img: 'https://images.unsplash.com/photo-1524502397800-2eeaad7c3fe5?w=320&h=568&fit=crop&q=80' },
+    { name: 'Anime Style',    gens: '445K', hasMusic: true,  likes: '41.1K', img: 'https://images.unsplash.com/photo-1504703395950-b89145a5425b?w=320&h=568&fit=crop&q=80' },
+    // Viral Videos (5–9)
+    { name: 'Viral Dances',   gens: '445K', hasMusic: true,  likes: '41.1K', img: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?w=320&h=568&fit=crop&q=80' },
+    { name: 'Old Photo',      gens: '142K', hasMusic: false, likes: '11.9K', img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=320&h=568&fit=crop&q=80' },
+    { name: 'Cinematic',      gens: '267K', hasMusic: true,  likes: '23.4K', img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=320&h=568&fit=crop&q=80' },
+    { name: 'Slow Motion',    gens: '189K', hasMusic: false, likes: '16.7K', img: 'https://images.unsplash.com/photo-1552058544-f2b08422138a?w=320&h=568&fit=crop&q=80' },
+    { name: 'Body Swap',      gens: '321K', hasMusic: true,  likes: '28.9K', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=320&h=568&fit=crop&q=80' },
+    // Romance (10–14)
+    { name: 'AI Kisses',      gens: '553K', hasMusic: true,  likes: '24.5K', img: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=320&h=568&fit=crop&q=80' },
+    { name: 'AI Hugs',        gens: '312K', hasMusic: false, likes: '29.8K', img: 'https://images.unsplash.com/photo-1516726817505-f5ed825624d8?w=320&h=568&fit=crop&q=80' },
+    { name: 'Cute Couple',    gens: '178K', hasMusic: true,  likes: '15.6K', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=320&h=568&fit=crop&q=80' },
+    { name: 'Love Story',     gens: '234K', hasMusic: true,  likes: '21.3K', img: 'https://images.unsplash.com/photo-1488716820095-cbe80883c496?w=320&h=568&fit=crop&q=80' },
+    { name: 'Romantic Walk',  gens: '145K', hasMusic: false, likes: '12.8K', img: 'https://images.unsplash.com/photo-1529139574466-a303027614b3?w=320&h=568&fit=crop&q=80' },
+  ];
+
+  const CATEGORIES = [
+    { name: 'Trends',       templates: ALL_TEMPLATES.slice(0, 5)  },
+    { name: 'Viral Videos', templates: ALL_TEMPLATES.slice(5, 10) },
+    { name: 'Romance',      templates: ALL_TEMPLATES.slice(10, 15)},
   ];
 
   // ─── Render: Promoted ───
@@ -835,30 +814,41 @@
     el.classList.add('active');
   }
 
-  // ─── Render: Templates ───
-  function renderTemplates() {
-    document.getElementById('templates-grid').innerHTML = TEMPLATES.map((t, i) => `
-      <div class="tpl-card" onclick="openPreview(${i})">
-        <div class="tpl-card-bg" style="background-image:url('${t.img}')"></div>
-        <div class="tpl-card-gradient"></div>
-        <div class="tpl-card-bottom">
-          <div class="tpl-card-name">${t.name}</div>
-          <div class="tpl-card-meta">
-            <div class="tpl-card-gens">
-              <svg viewBox="0 0 24 24">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-              </svg>
-              ${t.gens} generated
-            </div>
-            ${t.hasMusic ? `
-            <div class="tpl-card-music">
-              <svg viewBox="0 0 24 24">
-                <path d="M9 18V5l12-2v13"/>
-                <circle cx="6" cy="18" r="3"/>
-                <circle cx="18" cy="16" r="3"/>
-              </svg>
-            </div>` : ''}
-          </div>
+  // ─── Render: Categories ───
+  function renderCategories() {
+    document.getElementById('categories-container').innerHTML = CATEGORIES.map(cat => `
+      <div class="category-section">
+        <div class="category-header">
+          <span class="category-title">${cat.name}</span>
+          <span class="category-see-all">See all</span>
+        </div>
+        <div class="category-row">
+          ${cat.templates.map((t, i) => {
+            const globalIdx = ALL_TEMPLATES.indexOf(t);
+            return `
+              <div class="tpl-card" onclick="openPreview(${globalIdx})">
+                <div class="tpl-card-bg" style="background-image:url('${t.img}')"></div>
+                <div class="tpl-card-gradient"></div>
+                <div class="tpl-card-bottom">
+                  <div class="tpl-card-name">${t.name}</div>
+                  <div class="tpl-card-meta">
+                    <div class="tpl-card-gens">
+                      <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                      ${t.gens}
+                    </div>
+                    ${t.hasMusic ? `
+                    <div class="tpl-card-music">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M9 18V5l12-2v13"/>
+                        <circle cx="6" cy="18" r="3"/>
+                        <circle cx="18" cy="16" r="3"/>
+                      </svg>
+                    </div>` : ''}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
         </div>
       </div>
     `).join('');
@@ -866,33 +856,65 @@
 
   // ─── Navigation ───
   function nav(targetId) {
-    const screens = document.querySelectorAll('.screen');
     const current = document.querySelector('.screen.active');
     const target  = document.getElementById(targetId);
-
     if (current === target) return;
-
     current.classList.add('exit');
     current.classList.remove('active');
     target.classList.add('active');
-
     setTimeout(() => current.classList.remove('exit'), 320);
   }
 
   function openPreview(idx) {
-    const t = TEMPLATES[idx];
-    document.getElementById('preview-photo').style.backgroundImage = `url('${t.img}')`;
+    const t = ALL_TEMPLATES[idx];
+    document.getElementById('preview-photo').style.backgroundImage = `url('${t.img.replace('320&h=568', '393&h=852')}')`;
     document.getElementById('preview-title').textContent = t.name;
     document.getElementById('like-count').textContent = t.likes;
-    // reset like
+    // reset states
     document.getElementById('like-wrap').classList.remove('liked');
+    document.getElementById('save-wrap').classList.remove('saved');
+    // reset mute
+    _muted = false;
+    updateMuteUI();
     nav('s-preview');
   }
 
-  // ─── Like toggle ───
-  function toggleLike(btn) {
-    const wrap = document.getElementById('like-wrap');
-    wrap.classList.toggle('liked');
+  // ─── Like / Save toggles ───
+  function toggleLike() {
+    document.getElementById('like-wrap').classList.toggle('liked');
+  }
+  function toggleSave() {
+    document.getElementById('save-wrap').classList.toggle('saved');
+  }
+
+  // ─── Mute toggle ───
+  let _muted = false;
+  function toggleMute() {
+    _muted = !_muted;
+    updateMuteUI();
+  }
+  function updateMuteUI() {
+    const ico = document.getElementById('mute-ico');
+    const lbl = document.getElementById('mute-label');
+    const wrap = document.getElementById('mute-wrap');
+    if (_muted) {
+      // Speaker with X (muted)
+      ico.innerHTML = `
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <line x1="23" y1="9" x2="17" y2="15"/>
+        <line x1="17" y1="9" x2="23" y2="15"/>
+      `;
+      lbl.textContent = 'Muted';
+      wrap.style.background = 'rgba(255,255,255,0.12)';
+    } else {
+      ico.innerHTML = `
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      `;
+      lbl.textContent = 'Sound';
+      wrap.style.background = 'rgba(0,0,0,0.42)';
+    }
   }
 
   // ─── Tab bar ───
@@ -904,7 +926,7 @@
   // ─── Init ───
   renderPromoted();
   renderTags();
-  renderTemplates();
+  renderCategories();
 </script>
 </body>
 </html>
