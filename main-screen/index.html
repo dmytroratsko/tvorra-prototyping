@@ -273,11 +273,15 @@
     .tpl-card-gens {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
       font-size: 10.5px; font-weight: 600;
-      color: rgba(255,255,255,0.48);
+      color: rgba(255,255,255,0.55);
     }
-    .tpl-card-gens svg { width: 9px; height: 9px; fill: rgba(255,255,255,0.38); }
+    .tpl-card-gens svg {
+      width: 9px; height: 9px;
+      fill: rgba(255,255,255,0.55);
+      flex-shrink: 0;
+    }
     .tpl-card-music {
       display: flex;
       align-items: center;
@@ -829,7 +833,7 @@
                   <div class="tpl-card-name">${t.name}</div>
                   <div class="tpl-card-meta">
                     <div class="tpl-card-gens">
-                      <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                      <svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg>
                       ${t.gens}
                     </div>
                     ${t.hasMusic ? `
